@@ -72,10 +72,10 @@
     <!-- Replace logo.png with your logo file -->
     <img src="loo.png" alt="khatabook" class="logo">
     <h1>COMING SOON</h1>
-    <p>WE ARE WORKING ON SOMETHING AWESOME SO CREATE YOUR ACCOUNT</p>
+    <p>WE ARE WORKING ON SOMETHING AWESOME</p>
 </div>
 
-<!-- Login page -->
+<!-- Login page 
 
   
 <div class="box">
@@ -89,48 +89,8 @@
 
 <p id="successfully"></p>
 </div>
-  
+  -->
 
-<!-- Firebase -->
-<script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-analytics.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
-
-  // Your web app's Firebase configuration
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-  const firebaseConfig = {
-    apiKey: "AIzaSyAuAg4_58jiSXct_OvB02Ck0ZzfxjDHARM",
-    authDomain: "khatabook-c9aaa.firebaseapp.com",
-    projectId: "khatabook-c9aaa",
-    storageBucket: "khatabook-c9aaa.firebasestorage.app",
-    messagingSenderId: "671234901589",
-    appId: "1:671234901589:web:b5c1d46878d5b03172b6dc",
-    measurementId: "G-XCWSX1MMVL"
-  };
-
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-  
-  
-      const app = initializeApp(firebaseConfig);
-      const auth = getAuth(app);
-      
-      window.signup = function(){
-        createUserWithEmailAndPassword(auth, email.value, password.value)
-          .then(()=> msg.innerText="Account Created ✅")
-            .catch(err=> msg.innerText=err.message);
-            }
-            
-            window.login = function(){
-              signInWithEmailAndPassword(auth, email.value, password.value)
-                .then(()=> window.location.href="dashboard.html")
-                  .catch(err=> msg.innerText=err.message);
-                  }
-                  </script>-->
 
 
 
