@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Virtual Printer</title>
+    <style>
+        body { font-family: Arial; background: #f5f5f5; padding: 20px; }
+        h1 { color: #333; }
+        iframe { width: 100%; height: 500px; border: 1px solid #ccc; }
+    </style>
+</head>
+
+<body>
+
+    <h1>🖨 Virtual Printer Dashboard</h1>
+
+    <input type="file" id="file">
+    <button onclick="sendPrint()">Send to Printer</button>
+
+    <hr>
+
+    <h3>Last Print Preview</h3>
+    <iframe id="preview"></iframe>
+
+    <script>
+        function sendPrint() {
+            const fileInput = document.getElementById("file");
+            const file = fileInput.files[0];
+
+            const formData = new FormData();
+            formData.append("file", file);
+
+            fetch("http://localhost:3000/print", {
+                    method: "POST",
+                    body: formData
+                })
+                .then(res => res.json())
+                .then(data => {
+                    document.getElementById("preview").src =
+                        "http://localhost:3000/prints/" + data.file;
+                });
+        }
+    </script>
+
+</body>
+
+</html>
