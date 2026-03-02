@@ -1,84 +1,127 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Login</title>
+
+  <link rel="icon" href="favicon.png" type="image/png">
+  
+  <title>khatabook Coming Soon</title>
 
 <style>
-body{
-    font-family: Arial;
-    background:#f2f2f2;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    height:100vh;
-}
-.box{
-    background:white;
-    padding:30px;
-    width:300px;
-    text-align:center;
-    border-radius:10px;
-    box-shadow:0 10px 20px rgba(0,0,0,0.2);
-}
-input{
-    width:100%;
-    padding:10px;
-    margin:8px 0;
-}
-button{
-    width:100%;
-    padding:10px;
-    margin-top:10px;
-    cursor:pointer;
-}
-p{color:red;}
+    body {
+        margin: 0;
+        height: 100vh;
+        background: #ffffff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: Arial, sans-serif;
+        overflow: hidden;
+        color: #111;
+    }
+
+    .container {
+        text-align: center;
+    }
+
+    .logo {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        transition: all 0.5s ease;
+        animation: float 3s ease-in-out infinite;
+        filter: drop-shadow(0 0 15px rgba(255,255,255,0.2));
+    }
+
+    .logo:hover {
+        transform: scale(1.15) rotate(2deg);
+        filter: drop-shadow(0 0 30px #00f0ff);
+    }
+
+    h1 {
+        margin-top: 25px;
+        font-size: 36px;
+        letter-spacing: 4px;
+        animation: glow 2s ease-in-out infinite alternate;
+    }
+
+    p {
+        margin-top: 10px;
+        color: #aaa;
+        font-size: 14px;
+        letter-spacing: 2px;
+    }
+
+    @keyframes float {
+        0% { transform: translateY(0); }
+        50% { transform: translateY(-12px); }
+        100% { transform: translateY(0); }
+    }
+
+    @keyframes glow {
+        from { text-shadow: 0 0 5px #00f0ff; }
+        to { text-shadow: 0 0 20px #00f0ff; }
+    }
 </style>
 </head>
 
 <body>
 
-<div class="box">
-<h2>User Login</h2>
-
-<input type="email" id="email" placeholder="Email">
-<input type="password" id="password" placeholder="Password">
-
-<button onclick="signup()">Create Account</button>
-<button onclick="login()">Login</button>
-
-<p id="msg"></p>
+<div class="container">
+    <!-- Replace logo.png with your logo file -->
+    <img src="loo.png" alt="khatabook" class="logo">
+    <h1>COMING SOON</h1>
+    <p>WE ARE WORKING ON SOMETHING AWESOME</p>
 </div>
+
 
 <!-- Firebase -->
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } 
-from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-analytics.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
 
-/* 🔴 PASTE YOUR FIREBASE CONFIG HERE */
-const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID"
-};
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyAuAg4_58jiSXct_OvB02Ck0ZzfxjDHARM",
+    authDomain: "khatabook-c9aaa.firebaseapp.com",
+    projectId: "khatabook-c9aaa",
+    storageBucket: "khatabook-c9aaa.firebasestorage.app",
+    messagingSenderId: "671234901589",
+    appId: "1:671234901589:web:b5c1d46878d5b03172b6dc",
+    measurementId: "G-XCWSX1MMVL"
+  };
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+  
+  
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+      
+      window.signup = function(){
+        createUserWithEmailAndPassword(auth, email.value, password.value)
+          .then(()=> msg.innerText="Account Created ✅")
+            .catch(err=> msg.innerText=err.message);
+            }
+            
+            window.login = function(){
+              signInWithEmailAndPassword(auth, email.value, password.value)
+                .then(()=> window.location.href="dashboard.html")
+                  .catch(err=> msg.innerText=err.message);
+                  }
+                  </script>-->
 
-window.signup = function(){
-  createUserWithEmailAndPassword(auth, email.value, password.value)
-  .then(()=> msg.innerText="Account Created ✅")
-  .catch(err=> msg.innerText=err.message);
-}
 
-window.login = function(){
-  signInWithEmailAndPassword(auth, email.value, password.value)
-  .then(()=> window.location.href="dashboard.html")
-  .catch(err=> msg.innerText=err.message);
-}
-</script>
+
+
+
+
 
 </body>
 </html>
