@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="icon" href="favicon.png" type="image/png">
+  
+  <title>Coming Soon</title>
+
+<style>
+    body {
+        margin: 0;
+        height: 100vh;
+        background: radial-gradient(circle at top, #111, #000);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: Arial, sans-serif;
+        overflow: hidden;
+        color: white;
+    }
+
+    .container {
+        text-align: center;
+    }
+
+    .logo {
+        width: 160px;
+        height: 160px;
+        object-fit: contain;
+        transition: all 0.5s ease;
+        animation: float 3s ease-in-out infinite;
+        filter: drop-shadow(0 0 15px rgba(255,255,255,0.2));
+    }
+
+    .logo:hover {
+        transform: scale(1.15) rotate(2deg);
+        filter: drop-shadow(0 0 30px #00f0ff);
+    }
+
+    h1 {
+        margin-top: 25px;
+        font-size: 36px;
+        letter-spacing: 4px;
+        animation: glow 2s ease-in-out infinite alternate;
+    }
+
+    p {
+        margin-top: 10px;
+        color: #aaa;
+        font-size: 14px;
+        letter-spacing: 2px;
+    }
+
+    @keyframes float {
+        0% { transform: translateY(0); }
+        50% { transform: translateY(-12px); }
+        100% { transform: translateY(0); }
+    }
+
+    @keyframes glow {
+        from { text-shadow: 0 0 5px #00f0ff; }
+        to { text-shadow: 0 0 20px #00f0ff; }
+    }
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <!-- Replace logo.png with your logo file -->
+    <img src="logo.png" alt="Company Logo" class="logo">
+    <h1>COMING SOON</h1>
+    <p>WE ARE WORKING ON SOMETHING AWESOME</p>
+</div>
+
+</body>
+</html>
