@@ -1,170 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        <link rel="icon" href="favicon.png" type="image/png">
+<!-- Favicon (optional) -->
+<link rel="icon" href="favicon.png" type="image/png">
 
-        <title>khatabook Coming Soon</title>
+<title>Coming Soon</title>
 
-        <style>
-                body {
-                        margin: 0;
-                        height: 100vh;
-                        background: #ffffff;
-                        display: flex;
-                        justify-content: center;
-                        align-items: center;
-                        font-family: Arial, sans-serif;
-                        overflow: hidden;
-                        color: #111;
-                }
+<style>
+    body {
+            margin: 0;
+                    height: 100vh;
+                            background: #ffffff;
+                                    display: flex;
+                                            justify-content: center;
+                                                    align-items: center;
+                                                            font-family: Arial, sans-serif;
+                                                                    color: #111;
+                                                                        }
 
-                .container {
-                        text-align: center;
-                }
+                                                                            .container {
+                                                                                    text-align: center;
+                                                                                        }
 
-                .logo {
-                        width: 100%;
-                        height: 100%;
-                        object-fit: contain;
-                        transition: all 0.5s ease;
-                        animation: float 3s ease-in-out infinite;
-                        filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.2));
-                }
+                                                                                            /* LOGO SETTINGS */
+                                                                                                .logo {
+                                                                                                        width: 180px;      /* 👈 CHANGE WIDTH HERE */
+                                                                                                                height: 180px;     /* 👈 CHANGE HEIGHT HERE */
+                                                                                                                        object-fit: contain;
+                                                                                                                                transition: all 0.4s ease;
+                                                                                                                                        animation: float 3s ease-in-out infinite;
+                                                                                                                                                filter: drop-shadow(0 10px 15px rgba(0,0,0,0.15));
+                                                                                                                                                    }
 
-                .logo:hover {
-                        transform: scale(1.15) rotate(2deg);
-                        filter: drop-shadow(0 0 30px #000202);
-                }
+                                                                                                                                                        .logo:hover {
+                                                                                                                                                                transform: scale(1.12);
+                                                                                                                                                                        filter: drop-shadow(0 15px 25px rgba(0,0,0,0.3));
+                                                                                                                                                                            }
 
-                h1 {
-                        margin-top: 25px;
-                        font-size: 36px;
-                        letter-spacing: 4px;
-                        animation: glow 2s ease-in-out infinite alternate;
-                }
+                                                                                                                                                                                h1 {
+                                                                                                                                                                                        margin-top: 25px;
+                                                                                                                                                                                                font-size: 34px;
+                                                                                                                                                                                                        letter-spacing: 4px;
+                                                                                                                                                                                                            }
 
-                p {
-                        margin-top: 10px;
-                        color: #56d3ec;
-                        font-size: 14px;
-                        letter-spacing: 2px;
-                }
+                                                                                                                                                                                                                p {
+                                                                                                                                                                                                                        margin-top: 8px;
+                                                                                                                                                                                                                                font-size: 14px;
+                                                                                                                                                                                                                                        letter-spacing: 2px;
+                                                                                                                                                                                                                                                color: #555;
+                                                                                                                                                                                                                                                    }
 
-                @keyframes float {
-                        0% {
-                                transform: translateY(0);
-                        }
+                                                                                                                                                                                                                                                        @keyframes float {
+                                                                                                                                                                                                                                                                0% { transform: translateY(0); }
+                                                                                                                                                                                                                                                                        50% { transform: translateY(-10px); }
+                                                                                                                                                                                                                                                                                100% { transform: translateY(0); }
+                                                                                                                                                                                                                                                                                    }
+                                                                                                                                                                                                                                                                                    </style>
+                                                                                                                                                                                                                                                                                    </head>
 
-                        50% {
-                                transform: translateY(-12px);
-                        }
+                                                                                                                                                                                                                                                                                    <body>
 
-                        100% {
-                                transform: translateY(0);
-                        }
-                }
+                                                                                                                                                                                                                                                                                    <div class="container">
+                                                                                                                                                                                                                                                                                        <!-- Replace logo.png with your logo -->
+                                                                                                                                                                                                                                                                                            <img src="logo.png" alt="khatabook" class="logo">
+                                                                                                                                                                                                                                                                                                <h1>COMING SOON</h1>
+                                                                                                                                                                                                                                                                                                    <p>WE ARE WORKING ON SOMETHING GREAT</p>
+                                                                                                                                                                                                                                                                                                    </div>
 
-                @keyframes glow {
-                        from {
-                                text-shadow: 0 0 5px #040404;
-                        }
-
-                        to {
-                                text-shadow: 0 0 20px #111212;
-                        }
-                }
-        </style>
-</head>
-
-<body>
-
-        <div class="container">
-                <!-- Replace logo.png with your logo file -->
-                <img src="logo.png" alt="khatabook" class="logo">
-                <h1>COMING SOON</h1>
-                <p>WE ARE WORKING ON SOMETHING AWESOME</p>
-        </div>
-
-<<<<<<< HEAD
-
-        <!-- Firebase -->
-        <script type="module">
-                // Import the functions you need from the SDKs you need
-                import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
-                import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-analytics.js";
-                // TODO: Add SDKs for Firebase products that you want to use
-                // https://firebase.google.com/docs/web/setup#available-libraries
-
-                // Your web app's Firebase configuration
-                // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-                const firebaseConfig = {
-                        apiKey: "AIzaSyAuAg4_58jiSXct_OvB02Ck0ZzfxjDHARM",
-                        authDomain: "khatabook-c9aaa.firebaseapp.com",
-                        projectId: "khatabook-c9aaa",
-                        storageBucket: "khatabook-c9aaa.firebasestorage.app",
-                        messagingSenderId: "671234901589",
-                        appId: "1:671234901589:web:b5c1d46878d5b03172b6dc",
-                        measurementId: "G-XCWSX1MMVL"
-                };
-
-                // Initialize Firebase
-                const app = initializeApp(firebaseConfig);
-                const analytics = getAnalytics(app);
-
-
-                const app = initializeApp(firebaseConfig);
-                const auth = getAuth(app);
-
-                window.signup = function () {
-                        createUserWithEmailAndPassword(auth, email.value, password.value)
-                                .then(() => msg.innerText = "Account Created ✅")
-                                .catch(err => msg.innerText = err.message);
-                }
-
-                window.login = function () {
-                        signInWithEmailAndPassword(auth, email.value, password.value)
-                                .then(() => window.location.href = "dashboard.html")
-                                .catch(err => msg.innerText = err.message);
-                }
-        </script>
-        -->
-
-
-
-
-
-
-
-=======
-<!-- Login page 
-
-  
-<div class="box">
-<h2>User Login</h2>
-
-<input type="email" id="email" placeholder="Email">
-<input type="password" id="password" placeholder="Password">
-
-<button onclick="signup()">Create Account</button>
-<button onclick="login()">Login</button>
-
-<p id="successfully"></p>
-</div>
-  -->
-
-
-
-
-
-
-
-
->>>>>>> 95bcb882ffba872fcbb3a73aa391dca6e209d5c4
-</body>
-
-</html>
->
+                                                                                                                                                                                                                                                                                                    </body>
+                                                                                                                                                                                                                                                                                                    </html>
