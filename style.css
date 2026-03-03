@@ -1,7 +1,7 @@
-body {
+
     margin: 0;
-    font-family: 'Segoe UI', sans-serif;
-    background: linear-gradient(135deg, #f5f7fa, #e4ecff);
+    font-family: Arial, sans-serif;
+    background: #F5F7FA;
 }
 
 /* HEADER */
@@ -10,14 +10,12 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 15px 20px;
-    background: rgba(255,255,255,0.7);
-    backdrop-filter: blur(10px);
-    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    background: linear-gradient(90deg, #6fb1fc, #4364f7);
+    color: white;
 }
 
 .company-name {
     font-size: 18px;
-    font-weight: 600;
 }
 
 .right-header {
@@ -32,13 +30,18 @@ body {
     border-radius: 50%;
     border: none;
     cursor: pointer;
-    background: #4364f7;
-    color: white;
-    transition: 0.3s;
 }
 
-.download-btn:hover {
-    transform: scale(1.1);
+.download-menu {
+    display: none;
+    position: absolute;
+    background: white;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    border-radius: 8px;
+}
+
+.download-wrapper:hover .download-menu {
+    display: block;
 }
 
 /* Worker Section */
@@ -47,123 +50,128 @@ body {
 }
 
 .worker-header {
-    font-weight: 600;
-    padding: 12px;
+    font-weight: bold;
+    padding: 10px;
     background: white;
-    border-radius: 10px;
+    border-radius: 8px;
     cursor: pointer;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
-    transition: 0.3s;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
 
-.worker-header:hover {
-    transform: translateY(-2px);
-}
-
-/* Grid */
+/* Employee Grid */
 .employee-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 15px;
-    margin-top: 12px;
+    margin-top: 10px;
 }
 
-/* Card */
+/* Employee Card */
 .employee-card {
-    border-radius: 15px;
+    background: white;
+    border-radius: 12px;
     padding: 15px;
-    color: #222;
-    background: rgba(255,255,255,0.9);
-    box-shadow: 0 6px 20px rgba(0,0,0,0.08);
-    transition: 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     position: relative;
-    overflow: hidden;
-}
-
-.employee-card:hover {
-    transform: translateY(-4px);
 }
 
 .employee-card h3 {
     margin: 0;
     font-size: 16px;
-    font-weight: 600;
 }
 
 .salary {
-    margin: 8px 0;
-    font-size: 14px;
-    font-weight: 500;
+    margin: 10px 0;
+    font-weight: bold;
 }
 
 .button-group {
     display: flex;
-    gap: 8px;
-    margin-top: 10px;
+    gap: 10px;
 }
 
 .present-btn {
-    flex: 1;
     background: #c8f7c5;
     border: none;
     padding: 8px;
-    border-radius: 20px;
-    font-weight: 600;
+    border-radius: 6px;
     cursor: pointer;
-    transition: 0.2s;
-}
-
-.present-btn:hover {
-    background: #9ef19a;
 }
 
 .absent-btn {
-    flex: 1;
     background: #f7c5c5;
     border: none;
     padding: 8px;
-    border-radius: 20px;
-    font-weight: 600;
+    border-radius: 6px;
     cursor: pointer;
-    transition: 0.2s;
-}
-
-.absent-btn:hover {
-    background: #f39c9c;
 }
 
 /* Add Card */
 .add-card {
     margin: 20px;
     background: white;
-    border-radius: 15px;
+    border-radius: 12px;
     padding: 40px;
     text-align: center;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     cursor: pointer;
-    transition: 0.3s;
 }
 
-.add-card:hover {
-    transform: scale(1.03);
+
+
+/* Modal */
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    justify-content: center;
+    align-items: center;
 }
 
-/* Attendance Screen */
+.modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 350px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.modal-content input,
+.modal-content select {
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+.modal-content button {
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    background: #4364f7;
+    color: white;
+    cursor: pointer;
+}
+
+.close-btn {
+    background: #f44336;
+}
+
+
+
+/* Full Screen Attendance */
 .attendance-screen {
     position: fixed;
     inset: 0;
-    background: linear-gradient(135deg, #f5f7fa, #e4ecff);
+    background: white;
     z-index: 999;
     display: none;
     flex-direction: column;
     padding: 20px;
     overflow-y: auto;
-    animation: slideUp 0.3s ease;
-}
-
-@keyframes slideUp {
-    from { transform: translateY(100%); }
-    to { transform: translateY(0); }
 }
 
 .attendance-header {
@@ -173,7 +181,7 @@ body {
 }
 
 .close-attendance {
-    background: #f44336;
+    background: red;
     color: white;
     border: none;
     border-radius: 50%;
@@ -182,33 +190,25 @@ body {
     cursor: pointer;
 }
 
-/* Calendar */
 .calendar {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    gap: 10px;
+    gap: 8px;
     margin-top: 20px;
 }
 
 .day-name {
+    font-weight: bold;
     text-align: center;
-    font-weight: 600;
-    color: #444;
 }
 
 .date-cell {
-    padding: 14px;
+    padding: 12px;
     text-align: center;
-    border-radius: 12px;
+    border-radius: 8px;
     cursor: pointer;
-    background: white;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.05);
-    transition: 0.2s;
+    background: #eee;
     position: relative;
-}
-
-.date-cell:hover {
-    transform: scale(1.05);
 }
 
 .present {
@@ -220,21 +220,11 @@ body {
 }
 
 .golden-dot {
-    width: 7px;
-    height: 7px;
+    width: 6px;
+    height: 6px;
     background: gold;
     border-radius: 50%;
     position: absolute;
-    bottom: 5px;
-    right: 5px;
-}
-
-/* Summary */
-#summary {
-    margin-top: 20px;
-    background: white;
-    padding: 15px;
-    border-radius: 15px;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.08);
-    font-weight: 500;
+    bottom: 4px;
+    right: 4px;
 }
