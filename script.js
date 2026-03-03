@@ -376,3 +376,8 @@ function deleteEmployee(id) {
 
     loadEmployees();
 }
+
+
+function goReport() {
+    window.location.href = "report.html";
+}
