@@ -1,0 +1,429 @@
+/* ================= GLOBAL ================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+input, select {
+    -webkit-user-select: auto;
+    user-select: auto;
+}
+
+body {
+    font-family: "Segoe UI", sans-serif;
+    background: linear-gradient(135deg, #e6f0ff, #f4f8ff);
+    overflow-x: hidden;
+}
+
+/* ================= GLASS EFFECT ================= */
+
+.glass-card {
+    background: #ffde59;
+    border-radius: 8px;
+    border: 3px solid #000000;
+    box-shadow: 6px 6px 0px #000000; /* Solid shadow, zero blur */
+    transition: transform 0.1s, box-shadow 0.1s;
+}
+/* Optional: Fun click effect 
+.glass-card :active {
+    transform: translate(4px, 4px);
+    box-shadow: 2px 2px 0px #000000;
+}
+*/
+
+
+/* ================= HEADER ================= */
+
+.header {
+    height: 70px;
+    padding: 0 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    background: #ffde59; /* Flat bold color */
+    border: 4px solid black;
+    box-shadow: 4px 4px 0px black;
+
+    font-family: 'Arial Black', sans-serif;
+    font-size: 18px;
+    color: black;
+}
+
+.header h1 {
+    font-weight: 900;
+    letter-spacing: 1.2px;
+}
+
+.header button {
+    background: #00ff88;
+    border: 3px solid black;
+    padding: 8px px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 4px 4px 0px black;
+    transition: 0.1s ease;
+}
+
+.header button:active {
+    box-shadow: 1px 1px 0px black;
+    transform: translate(3px, 3px);
+}
+
+.logo-section {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: relative;
+}
+
+.company-logo {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.company-name {
+    font-size: 20px;
+    font-weight: 520;
+}
+
+
+
+/* ===== Center Logo Menu ===== */
+
+.logo-dropdown {
+    position: fixed;
+    top: 25%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    background: #ffde59;
+    border-radius: 18px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+    display: none;
+    flex-direction: column;
+    width: 260px;
+    overflow: hidden;
+    z-index: 9999;
+    animation: fadePop 0.25s ease;
+}
+
+.logo-dropdown div {
+    padding: 15px;
+    text-align: center;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.logo-dropdown div:hover {
+    background: #f2f6ff;
+}
+
+@keyframes fadePop {
+    from { opacity: 0; transform: translate(-50%, -60%); }
+    to { opacity: 1; transform: translate(-50%, -50%); }
+}
+
+@keyframes fadeSlide {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Header Right */
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.date-display {
+    font-weight: 500;
+}
+
+.add-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 90%;
+    border: none;
+    background: white;
+    color: #3c6df0;
+    font-size: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.add-btn:hover {
+    transform: scale(1.1);
+}
+
+/* ================= WORKER SECTION ================= */
+
+.worker-section {
+    padding: 20px;
+}
+
+.worker-header {
+    padding: 13px 25px;
+    border-radius: 5px;
+    background: #00ff88;
+    backdrop-filter: blur(10px);
+    display: flex;
+    justify-content: space-between;
+    cursor: pointer;
+    transition: .3s;
+}
+
+/*.worker-header:hover {
+    transform: translateY(-2px);
+}*/
+
+.arrow {
+    transition: .5s;
+}
+
+.employee-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-top: 15px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+}
+
+/* ================= EMPLOYEE CARD ================= */
+
+.employee-card {
+    height: 200px;
+    border-radius: 5px;
+    padding: 15px;
+    position: relative;
+    overflow: hidden;
+    background: rgba(255,255,255,0.8);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+    transition: 0.3s;
+}
+
+/*.employee-card:hover {
+    transform: translateY(-4px);
+}*/
+
+.card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card-name {
+    width: 80%;
+    font-weight: 400;
+    font-size: 20px;
+}
+
+.open-btn {
+    width: 20%;
+    text-align: right;
+    cursor: pointer;
+}
+
+/* Status Dot */
+
+.status-dot {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+/* P A Buttons */
+
+.pa-container {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 75px;
+}
+
+.pa-btn {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: none;
+    font-weight: 1000;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.pa-btn.present {
+    background: #42f55a;
+}
+
+.pa-btn.absent {
+    background: #ed1f0c;
+}
+
+.pa-btn.active {
+    width: 1100px;
+    border-radius: 30px;
+}
+
+/* Monthly Earned */
+
+.month-summary {
+    text-align: center;
+    margin-top: 10px;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+/* ================= MODAL ================= */
+
+.modal {
+    position: fixed;
+    inset: 0;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0,0,0,.5);
+}
+
+.modal-content {
+    padding: 25px;
+    width: 90%;
+    max-width: 350px;
+}
+
+.modal-content input,
+.modal-content select {
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+}
+
+.modal-buttons {
+    margin-top: 15px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.cancel-btn {
+    background: #ed1f0c;
+}
+
+/* ================= ATTENDANCE SCREEN ================= */
+
+.attendance-screen {
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(135deg, #eef4ff, #dbe7ff);
+    display: none;
+    flex-direction: column;
+    padding: 20px;
+    animation: slideUp 0.4s ease;
+}
+
+@keyframes slideUp {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+}
+
+.attendance-header {
+    padding: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.month-nav {
+    background: white;
+    border: none;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    font-size: 18px;
+    cursor: pointer;
+    position: absolute;
+}
+
+.month-nav:first-child {
+    left: 10px;
+}
+
+.month-nav:nth-child(3) {
+    right: 50px;
+}
+
+.close-attendance {
+    position: absolute;
+    right: 10px;
+    background: #ff6b6b;
+    border: none;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    color: white;
+    cursor: pointer;
+}
+
+.calendar {
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+}
+
+.date-cell {
+    padding: 14px;
+    border-radius: 12px;
+    text-align: center;
+    background: white;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+/*.date-cell:hover {
+    transform: scale(1.05);
+}*/
+
+.present-day {
+    background: #d2ffd8;
+}
+
+.absent-day {
+    background: #ffd4d4;
+}
+
+.summary-card {
+    margin-top: 20px;
+    padding: 15px;
+}
+
+/* ================= PAYMENT MODAL ================= */
+
+.payment-modal {
+    position: fixed;
+    inset: 0;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0,0,0,0.4);
+}
+
+.payment-box {
+    padding: 25px;
+    width: 90%;
+    max-width: 300px;
+}
