@@ -608,20 +608,49 @@ function installPWA() {
 
 function exportBackup() {
     const employees = localStorage.getItem("employees") || "[]";
-    const blob = new Blob([employees], { type: "application/json" });
-    const url  = URL.createObjectURL(blob);
-    const a    = document.createElement("a");
+    const now = new Date();
+    const dateStr = now.getFullYear() + "-" + String(now.getMonth()+1).padStart(2,"0") + "-" + String(now.getDate()).padStart(2,"0");
+    const fileName = "khatabook-backup-" + dateStr + ".json";
 
-    const now  = new Date();
-    const dateStr = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,"0")}-${String(now.getDate()).padStart(2,"0")}`;
-    a.href     = url;
-    a.download = `khatabook-backup-${dateStr}.json`;
-    a.click();
-    URL.revokeObjectURL(url);
+    // Method 1: data URI download (most compatible on Android)
+    try {
+        const dataUri = "data:application/json;charset=utf-8," + encodeURIComponent(employees);
+        const a = document.createElement("a");
+        a.href = dataUri;
+        a.download = fileName;
+        a.style.display = "none";
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(() => document.body.removeChild(a), 500);
+    } catch(e) {}
+
+    // Always also show the copy-text modal as a guaranteed fallback
+    setTimeout(() => showBackupTextModal(employees, fileName), 800);
 }
 
-function importBackup() {
-    document.getElementById("importFileInput").click();
+function showBackupTextModal(data, fileName) {
+    const existing = document.getElementById("backupTextModal");
+    if (existing) existing.remove();
+
+    const modal = document.createElement("div");
+    modal.id = "backupTextModal";
+    modal.style.cssText = "position:fixed;inset:0;background:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center;z-index:99999;padding:16px;";
+    modal.innerHTML = `
+        <div style="background:#ffde59;border:3px solid #000;border-radius:12px;box-shadow:5px 5px 0 #000;padding:20px;width:100%;max-width:420px;">
+            <h3 style="font-family:'Arial Black',sans-serif;margin-bottom:10px;">&#x1F4BE; Backup Ready</h3>
+            <p style="font-size:13px;margin-bottom:10px;">If download did not start automatically, copy the text below and save it in WhatsApp or Notes app.</p>
+            <textarea id="backupTextArea" style="width:100%;height:120px;font-size:11px;border:2px solid #000;border-radius:8px;padding:8px;resize:none;font-family:monospace;" readonly></textarea>
+            <div style="display:flex;gap:10px;margin-top:12px;">
+                <button onclick="document.getElementById('backupTextArea').select();document.execCommand('copy');this.innerText='Copied!';" style="flex:1;background:#000;color:#ffde59;border:none;border-radius:8px;padding:10px;font-weight:bold;font-size:14px;cursor:pointer;">Copy All</button>
+                <button onclick="document.getElementById('backupTextModal').remove();" style="flex:1;background:#fff;border:2px solid #000;border-radius:8px;padding:10px;font-weight:bold;font-size:14px;cursor:pointer;">Close</button>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(modal);
+    setTimeout(() => {
+        const ta = document.getElementById("backupTextArea");
+        if (ta) { ta.value = data; ta.select(); }
+    }, 100);
 }
 
 function handleImportFile(input) {
@@ -633,16 +662,104 @@ function handleImportFile(input) {
         try {
             const data = JSON.parse(e.target.result);
             if (!Array.isArray(data)) throw new Error("Invalid format");
-
-            showConfirm("⚠️ This will REPLACE all current data with the backup. Continue?", () => {
-                localStorage.setItem("employees", JSON.stringify(data));
-                loadEmployees();
-                alert(`✅ Restored ${data.length} employees successfully!`);
-            });
+            doRestore(data);
         } catch {
-            alert("❌ Invalid backup file. Please use a valid खाताबुक backup.");
+            alert("Invalid backup file. Please use a valid backup.");
         }
     };
     reader.readAsText(file);
-    input.value = ""; // reset so same file can be re-selected
+    input.value = "";
+}
+
+// ================= RESTORE FROM PASTED TEXT =================
+
+function importBackup() {
+    const existing = document.getElementById("restoreModal");
+    if (existing) existing.remove();
+
+    const modal = document.createElement("div");
+    modal.id = "restoreModal";
+    modal.style.cssText = "position:fixed;inset:0;background:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center;z-index:99999;padding:16px;";
+    modal.innerHTML = `
+        <div style="background:#ffde59;border:3px solid #000;border-radius:12px;box-shadow:5px 5px 0 #000;padding:20px;width:100%;max-width:420px;">
+            <h3 style="font-family:'Arial Black',sans-serif;margin-bottom:14px;">&#x1F4C2; Restore Backup</h3>
+            <button onclick="document.getElementById('importFileInput').click();document.getElementById('restoreModal').remove();"
+                style="width:100%;background:#000;color:#ffde59;border:none;border-radius:8px;padding:12px;font-weight:bold;font-size:15px;cursor:pointer;margin-bottom:10px;">
+                &#x1F4C1; Choose Backup File (.json)
+            </button>
+            <p style="text-align:center;font-size:13px;margin:8px 0;">&#x2014; OR &#x2014;</p>
+            <p style="font-size:13px;margin-bottom:6px;">Paste your copied backup text here:</p>
+            <textarea id="pasteRestoreArea" placeholder="Paste backup text here..." style="width:100%;height:100px;font-size:11px;border:2px solid #000;border-radius:8px;padding:8px;resize:none;font-family:monospace;"></textarea>
+            <div style="display:flex;gap:10px;margin-top:12px;">
+                <button onclick="restoreFromPaste()" style="flex:1;background:#000;color:#ffde59;border:none;border-radius:8px;padding:10px;font-weight:bold;font-size:14px;cursor:pointer;">&#x2705; Restore</button>
+                <button onclick="document.getElementById('restoreModal').remove();" style="flex:1;background:#fff;border:2px solid #000;border-radius:8px;padding:10px;font-weight:bold;font-size:14px;cursor:pointer;">&#x2715; Cancel</button>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(modal);
+}
+
+function restoreFromPaste() {
+    const text = (document.getElementById("pasteRestoreArea").value || "").trim();
+    if (!text) { alert("Please paste your backup text first."); return; }
+    try {
+        const data = JSON.parse(text);
+        if (!Array.isArray(data)) throw new Error("Invalid");
+        document.getElementById("restoreModal").remove();
+        doRestore(data);
+    } catch(e) {
+        alert("Invalid backup text. Please make sure you copied the full backup and try again.");
+    }
+}
+
+// ================= SAFE RESTORE CORE =================
+// Uses its own confirm UI — does NOT share confirmCallback with other dialogs
+
+function doRestore(data) {
+    // Snapshot current data BEFORE touching anything
+    const safetyBackup = localStorage.getItem("employees") || "[]";
+
+    // Show a self-contained confirm inside a new modal
+    const existing = document.getElementById("restoreConfirmModal");
+    if (existing) existing.remove();
+
+    const modal = document.createElement("div");
+    modal.id = "restoreConfirmModal";
+    modal.style.cssText = "position:fixed;inset:0;background:rgba(0,0,0,0.75);display:flex;align-items:center;justify-content:center;z-index:99999;padding:16px;";
+    modal.innerHTML = `
+        <div style="background:#ffde59;border:3px solid #000;border-radius:12px;box-shadow:5px 5px 0 #000;padding:22px;width:100%;max-width:380px;text-align:center;">
+            <div style="font-size:36px;margin-bottom:10px;">&#x26A0;&#xFE0F;</div>
+            <p style="font-family:'Arial Black',sans-serif;font-size:15px;margin-bottom:6px;">Restore ${data.length} employees?</p>
+            <p style="font-size:13px;color:#333;margin-bottom:18px;">Current data will be replaced. This cannot be undone.</p>
+            <div style="display:flex;gap:10px;">
+                <button id="restoreYesBtn" style="flex:1;background:#000;color:#ffde59;border:none;border-radius:8px;padding:12px;font-weight:bold;font-size:15px;cursor:pointer;">&#x2705; Yes, Restore</button>
+                <button onclick="document.getElementById('restoreConfirmModal').remove();" style="flex:1;background:#fff;border:2px solid #000;border-radius:8px;padding:12px;font-weight:bold;font-size:15px;cursor:pointer;">&#x2715; Cancel</button>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(modal);
+
+    // Attach click handler directly on the button — no shared global state
+    document.getElementById("restoreYesBtn").addEventListener("click", function() {
+        try {
+            localStorage.setItem("employees", JSON.stringify(data));
+
+            // Verify the write actually worked
+            const verify = JSON.parse(localStorage.getItem("employees") || "[]");
+            if (!Array.isArray(verify) || verify.length !== data.length) {
+                throw new Error("Write verification failed");
+            }
+
+            document.getElementById("restoreConfirmModal").remove();
+            loadEmployees();
+            alert("Restored " + data.length + " employees successfully!");
+
+        } catch(err) {
+            // Something went wrong — put the original data back
+            localStorage.setItem("employees", safetyBackup);
+            document.getElementById("restoreConfirmModal").remove();
+            loadEmployees();
+            alert("Restore failed. Your original data has been kept safe.");
+        }
+    });
 }
