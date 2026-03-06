@@ -147,6 +147,29 @@ body {
     box-shadow: 1px 1px 0px #000;
 }
 
+/* ================= SEARCH BAR ================= */
+
+.search-container {
+    padding: 12px 20px 0;
+}
+
+.search-input {
+    width: 100%;
+    padding: 10px 16px;
+    border-radius: 30px;
+    border: 2.5px solid #000;
+    font-size: 14px;
+    font-weight: 500;
+    background: white;
+    box-shadow: 3px 3px 0px #000;
+    outline: none;
+    transition: box-shadow 0.1s;
+}
+
+.search-input:focus {
+    box-shadow: 1px 1px 0px #000;
+}
+
 /* ================= WORKER SECTION ================= */
 
 .worker-section {
@@ -191,7 +214,7 @@ body {
 /* ================= EMPLOYEE CARD ================= */
 
 .employee-card {
-    height: 200px;
+    height: 210px;
     border-radius: 10px;
     padding: 14px;
     position: relative;
@@ -206,13 +229,26 @@ body {
 .card-top {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
+}
+
+.card-info {
+    max-width: 70%;
 }
 
 .card-name {
     font-weight: 700;
     font-size: 17px;
-    max-width: 75%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.card-phone {
+    font-size: 11px;
+    color: #666;
+    font-weight: 500;
+    margin-top: 2px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -250,16 +286,16 @@ body {
     justify-content: center;
     align-items: center;
     gap: 12px;
-    margin-top: 62px;
+    margin-top: 52px;
 }
 
 .pa-btn {
-    width: 50px;
-    height: 50px;
+    width: 54px;
+    height: 54px;
     border-radius: 50%;
     border: 2.5px solid rgba(0,0,0,0.25);
     font-weight: 800;
-    font-size: 15px;
+    font-size: 16px;
     cursor: pointer;
     transition: width 0.35s ease, border-radius 0.35s ease,
                 visibility 0.1s, transform 0.1s;
@@ -274,10 +310,10 @@ body {
     transform: scale(0.93);
 }
 
-/* ✅ Active state: expands to fill container */
+/* Active state: expands to fill container */
 .pa-btn.active {
-    width: 180px;
-    border-radius: 25px;
+    width: 195px;
+    border-radius: 27px;
     font-size: 14px;
 }
 
@@ -367,6 +403,44 @@ body {
     color: white;
 }
 
+/* ================= CUSTOM CONFIRM DIALOG ================= */
+
+.confirm-modal {
+    position: fixed;
+    inset: 0;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.55);
+    z-index: 2000;
+    animation: confirmFade 0.15s ease;
+}
+
+@keyframes confirmFade {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+.confirm-box {
+    padding: 24px 20px;
+    width: 88%;
+    max-width: 320px;
+    text-align: center;
+    animation: confirmPop 0.2s ease;
+}
+
+@keyframes confirmPop {
+    from { transform: scale(0.85); opacity: 0; }
+    to   { transform: scale(1);    opacity: 1; }
+}
+
+.confirm-box p {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 18px;
+    line-height: 1.5;
+}
+
 /* ================= ATTENDANCE SCREEN ================= */
 
 .attendance-screen {
@@ -387,6 +461,7 @@ body {
     to   { transform: translateY(0); }
 }
 
+/* ✅ FIX: Month name auto-adjusts and won't overflow below arrow */
 .attendance-header {
     padding: 12px 16px;
     display: flex;
@@ -394,6 +469,17 @@ body {
     align-items: center;
     position: relative;
     flex-shrink: 0;
+    min-height: 60px;
+}
+
+.attendance-header h2 {
+    font-size: clamp(13px, 4.5vw, 20px);
+    white-space: nowrap;
+    text-align: center;
+    flex: 1;
+    padding: 0 50px; /* space for nav buttons */
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .month-nav {
@@ -410,6 +496,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-shrink: 0;
 }
 
 .month-nav:active {
@@ -440,7 +527,7 @@ body {
     box-shadow: 1px 1px 0px #000;
 }
 
-/* Calendar grid: 7 columns for days of week */
+/* Calendar grid */
 
 .calendar-wrapper {
     flex-shrink: 0;
@@ -465,8 +552,10 @@ body {
     padding: 4px 0 6px;
 }
 
+/* ✅ FIX: position:relative needed for the golden dot */
 .date-cell {
-    padding: 10px 4px;
+    position: relative;
+    padding: 10px 4px 4px;
     border-radius: 8px;
     text-align: center;
     background: #f5f7ff;
@@ -475,6 +564,11 @@ body {
     font-size: 13px;
     font-weight: 500;
     border: 1.5px solid transparent;
+    min-height: 38px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
 }
 
 .date-cell:hover {
@@ -500,9 +594,16 @@ body {
     border-color: #e05555 !important;
 }
 
-.paid-day {
-    outline: 2px solid #3c6df0;
-    outline-offset: -2px;
+/* ✅ NEW: Golden dot for paid days (replaces old blue outline) */
+.payment-dot {
+    display: block;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #FFD700;
+    box-shadow: 0 0 5px #FFD700, 0 0 2px #FFA500;
+    margin-top: 2px;
+    flex-shrink: 0;
 }
 
 /* ================= SUMMARY CARD ================= */
@@ -543,23 +644,31 @@ body {
     color: #111;
 }
 
-/* ================= PAYMENT MODAL ================= */
+/* ================= PAYMENT MODAL — NO JITTER FIX ================= */
 
 .payment-modal {
     position: fixed;
     inset: 0;
-    display: none;
-    justify-content: center;
-    align-items: center;
+    display: none;          /* toggled to "block" in JS */
     background: rgba(0, 0, 0, 0.45);
     z-index: 999;
 }
 
+/* Box uses its own fixed centering — NOT flex-dependent, so no frame-delay jitter */
 .payment-box {
-    padding: 25px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     width: 92%;
-    max-width: 300px;
-    animation: fadePop 0.2s ease;
+    max-width: 310px;
+    padding: 25px;
+    animation: payPop 0.2s ease;
+}
+
+@keyframes payPop {
+    from { opacity: 0; transform: translate(-50%, -50%) scale(0.85); }
+    to   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
 }
 
 .payment-box h3 {
