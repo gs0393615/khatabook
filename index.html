@@ -1,13 +1,10 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
- <!-- Favicon (optional) -->
 <link rel="icon" href="favicon.png" type="image/png">
- 
- <title>Attendance System</title>
+<title>Attendance System</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -15,15 +12,13 @@
 <!-- ================= HEADER ================= -->
 
 <header class="header">
-    
     <div class="logo-section">
-        <img src="logo.png" width="30" height="20" class="Khatabook" id="logoBtn">
+        <img src="logo.png" width="30" height="20" class="Khatabook" id="logoBtn" style="cursor:pointer;">
         <h1 class="company-name">खाताबुक</h1>
 
         <div class="logo-dropdown" id="logoDropdown">
-            <div onclick="goHome()">Home</div>
-            <div onclick="goReport()">Download Report</div>
-            <div>others</div>
+            <div onclick="goHome()">🏠 Home</div>
+            <div onclick="goReport()">📥 Download Report</div>
         </div>
     </div>
 
@@ -31,14 +26,13 @@
         <div class="date-display" id="currentDate"></div>
         <button class="add-btn" onclick="openAddEmployee()">+</button>
     </div>
-
 </header>
 
 <!-- ================= WORKER SECTIONS ================= -->
 
 <section class="worker-section">
     <div class="worker-header" onclick="toggleSection('headWorkers', this)">
-        <span>मिस्त्री</span>
+        <span>👷 मिस्त्री</span>
         <span class="arrow">↓</span>
     </div>
     <div class="employee-grid" id="headWorkers"></div>
@@ -46,7 +40,7 @@
 
 <section class="worker-section">
     <div class="worker-header" onclick="toggleSection('labourers', this)">
-        <span>लेबर</span>
+        <span>🧱 लेबर</span>
         <span class="arrow">↓</span>
     </div>
     <div class="employee-grid" id="labourers"></div>
@@ -56,21 +50,21 @@
 
 <div class="modal" id="employeeModal">
     <div class="modal-content glass-card">
-        <h2 align="center">नाम झोड़े</h2>
+        <h2>नाम झोड़े</h2>
 
-        <input type="text" id="empName" placeholder="नाम">
-        <input type="number" id="dailyWage" placeholder="salary (₹)">
-        
+        <input type="text" id="empName" placeholder="नाम दर्ज करें">
+        <input type="number" id="dailyWage" placeholder="Daily Salary (₹)">
+
         <select id="workerType">
-            <option value="headWorkers">मिस्त्री</option>
-            <option value="labourers">लेबर</option>
+            <option value="headWorkers">👷 मिस्त्री</option>
+            <option value="labourers">🧱 लेबर</option>
         </select>
 
-        <input type="file" id="empImage" accept="image/*">
+        <input type="file" id="empImage" accept="image/*" style="font-size:13px;">
 
         <div class="modal-buttons">
-            <button onclick="saveEmployee()">झोड़े</button>
-            <button onclick="closeModal()" class="cancel-btn">Cancel</button>
+            <button onclick="saveEmployee()">✅ झोड़े</button>
+            <button onclick="closeModal()" class="cancel-btn">✕ Cancel</button>
         </div>
     </div>
 </div>
@@ -98,11 +92,11 @@
 
 <div class="payment-modal" id="paymentModal">
     <div class="payment-box glass-card">
-        <h3>Payment paid</h3>
+        <h3>💸 Payment paid</h3>
         <input type="number" id="paymentAmount" placeholder="Enter Amount (₹)">
-        <div class="modal-buttons">
-            <button onclick="savePayment()">Save</button>
-            <button onclick="closePayment()" class="cancel-btn">Cancel</button>
+        <div class="modal-buttons" style="margin-top:14px;">
+            <button onclick="savePayment()">✅ Save</button>
+            <button onclick="closePayment()" class="cancel-btn">✕ Cancel</button>
         </div>
     </div>
 </div>
@@ -110,4 +104,3 @@
 <script src="script.js"></script>
 </body>
 </html>
-
