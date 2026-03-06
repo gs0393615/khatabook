@@ -8,7 +8,7 @@
     user-select: none;
 }
 
-input, select {
+input, select, textarea {
     -webkit-user-select: auto;
     user-select: auto;
 }
@@ -17,23 +17,609 @@ body {
     font-family: "Segoe UI", sans-serif;
     background: linear-gradient(135deg, #e6f0ff, #f4f8ff);
     overflow-x: hidden;
+    min-height: 100vh;
 }
 
-/* ================= GLASS EFFECT ================= */
+/* ================= GLASS / CARD STYLE ================= */
 
 .glass-card {
     background: #ffde59;
-    border-radius: 8px;
-    border: 3px solid #000000;
-    box-shadow: 6px 6px 0px #000000; /* Solid shadow, zero blur */
+    border-radius: 10px;
+    border: 3px solid #000;
+    box-shadow: 5px 5px 0px #000;
     transition: transform 0.1s, box-shadow 0.1s;
 }
-/* Optional: Fun click effect 
-.glass-card :active {
-    transform: translate(4px, 4px);
-    box-shadow: 2px 2px 0px #000000;
+
+/* ================= HEADER ================= */
+
+.header {
+    height: 70px;
+    padding: 0 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    background: #ffde59;
+    border-bottom: 4px solid black;
+    box-shadow: 0 4px 0px black;
+
+    font-family: 'Arial Black', sans-serif;
+    font-size: 18px;
+    color: black;
+    position: sticky;
+    top: 0;
+    z-index: 100;
 }
-*/
+
+.header h1 {
+    font-weight: 900;
+    letter-spacing: 1.2px;
+}
+
+.logo-section {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: relative;
+}
+
+.company-name {
+    font-size: 20px;
+    font-weight: 700;
+}
+
+/* ===== Logo Dropdown Menu ===== */
+
+.logo-dropdown {
+    position: fixed;
+    top: 25%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    background: #ffde59;
+    border-radius: 18px;
+    border: 3px solid #000;
+    box-shadow: 5px 5px 0px #000;
+    display: none;
+    flex-direction: column;
+    width: 260px;
+    overflow: hidden;
+    z-index: 9999;
+    animation: fadePop 0.2s ease;
+}
+
+.logo-dropdown div {
+    padding: 15px 20px;
+    text-align: center;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 15px;
+    border-bottom: 2px solid rgba(0,0,0,0.1);
+    transition: background 0.15s;
+}
+
+.logo-dropdown div:last-child {
+    border-bottom: none;
+}
+
+.logo-dropdown div:hover {
+    background: rgba(0,0,0,0.07);
+}
+
+@keyframes fadePop {
+    from { opacity: 0; transform: translate(-50%, -58%); }
+    to   { opacity: 1; transform: translate(-50%, -50%); }
+}
+
+/* Header Right */
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.date-display {
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.add-btn {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: 3px solid #000;
+    background: white;
+    color: #000;
+    font-size: 22px;
+    cursor: pointer;
+    font-weight: bold;
+    box-shadow: 3px 3px 0px #000;
+    transition: transform 0.1s, box-shadow 0.1s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+
+.add-btn:active {
+    transform: translate(2px, 2px);
+    box-shadow: 1px 1px 0px #000;
+}
+
+/* ================= WORKER SECTION ================= */
+
+.worker-section {
+    padding: 20px;
+}
+
+.worker-header {
+    padding: 13px 20px;
+    border-radius: 8px;
+    background: #00ff88;
+    border: 3px solid #000;
+    box-shadow: 4px 4px 0px #000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 16px;
+    transition: transform 0.1s, box-shadow 0.1s;
+}
+
+.worker-header:active {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0px #000;
+}
+
+.arrow {
+    transition: transform 0.4s ease;
+    font-size: 18px;
+}
+
+.employee-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-top: 15px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+}
+
+/* ================= EMPLOYEE CARD ================= */
+
+.employee-card {
+    height: 200px;
+    border-radius: 10px;
+    padding: 14px;
+    position: relative;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.85);
+    border: 2px solid rgba(0,0,0,0.1);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+    transition: transform 0.2s, box-shadow 0.2s;
+    backdrop-filter: blur(6px);
+}
+
+.card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card-name {
+    font-weight: 700;
+    font-size: 17px;
+    max-width: 75%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.open-btn {
+    cursor: pointer;
+    font-size: 18px;
+    padding: 2px;
+    opacity: 0.7;
+    transition: opacity 0.15s, transform 0.15s;
+}
+
+.open-btn:hover {
+    opacity: 1;
+    transform: scale(1.15);
+}
+
+/* Status Dot */
+
+.status-dot {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    border: 2px solid rgba(0,0,0,0.3);
+}
+
+/* P A Buttons */
+
+.pa-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    margin-top: 62px;
+}
+
+.pa-btn {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 2.5px solid rgba(0,0,0,0.25);
+    font-weight: 800;
+    font-size: 15px;
+    cursor: pointer;
+    transition: width 0.35s ease, border-radius 0.35s ease,
+                visibility 0.1s, transform 0.1s;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.pa-btn.present { background: #42f55a; }
+.pa-btn.absent  { background: #ed1f0c; color: white; }
+
+.pa-btn:active {
+    transform: scale(0.93);
+}
+
+/* ✅ Active state: expands to fill container */
+.pa-btn.active {
+    width: 180px;
+    border-radius: 25px;
+    font-size: 14px;
+}
+
+/* Monthly Earned */
+
+.month-summary {
+    text-align: center;
+    margin-top: 10px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #444;
+}
+
+/* ================= MODAL (Add Employee) ================= */
+
+.modal {
+    position: fixed;
+    inset: 0;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 500;
+}
+
+.modal-content {
+    padding: 25px;
+    width: 92%;
+    max-width: 360px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.modal-content h2 {
+    text-align: center;
+    margin-bottom: 12px;
+    font-size: 20px;
+}
+
+.modal-content input,
+.modal-content select {
+    width: 100%;
+    padding: 11px 14px;
+    margin-top: 10px;
+    border-radius: 8px;
+    border: 2px solid #000;
+    font-size: 14px;
+    background: white;
+    outline: none;
+    box-shadow: 3px 3px 0px rgba(0,0,0,0.2);
+    transition: box-shadow 0.1s;
+}
+
+.modal-content input:focus,
+.modal-content select:focus {
+    box-shadow: 1px 1px 0px rgba(0,0,0,0.2);
+}
+
+.modal-buttons {
+    margin-top: 18px;
+    display: flex;
+    gap: 10px;
+    justify-content: space-between;
+}
+
+.modal-buttons button {
+    flex: 1;
+    padding: 11px;
+    font-size: 14px;
+    font-weight: 700;
+    border: 2.5px solid #000;
+    border-radius: 8px;
+    cursor: pointer;
+    background: #00ff88;
+    box-shadow: 3px 3px 0px #000;
+    transition: transform 0.1s, box-shadow 0.1s;
+}
+
+.modal-buttons button:active {
+    transform: translate(2px, 2px);
+    box-shadow: 1px 1px 0px #000;
+}
+
+.cancel-btn {
+    background: #ff6b6b !important;
+    color: white;
+}
+
+/* ================= ATTENDANCE SCREEN ================= */
+
+.attendance-screen {
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(135deg, #eef4ff, #dbe7ff);
+    display: none;
+    flex-direction: column;
+    padding: 16px;
+    gap: 14px;
+    overflow-y: auto;
+    animation: slideUp 0.35s ease;
+    z-index: 200;
+}
+
+@keyframes slideUp {
+    from { transform: translateY(100%); }
+    to   { transform: translateY(0); }
+}
+
+.attendance-header {
+    padding: 12px 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    flex-shrink: 0;
+}
+
+.month-nav {
+    background: white;
+    border: 2.5px solid #000;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    font-size: 20px;
+    cursor: pointer;
+    position: absolute;
+    box-shadow: 2px 2px 0px #000;
+    transition: transform 0.1s, box-shadow 0.1s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.month-nav:active {
+    transform: translate(1px, 1px);
+    box-shadow: 1px 1px 0px #000;
+}
+
+.month-nav:first-child  { left: 12px; }
+.month-nav:nth-child(3) { right: 55px; }
+
+.close-attendance {
+    position: absolute;
+    right: 12px;
+    background: #ff6b6b;
+    border: 2.5px solid #000;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+    box-shadow: 2px 2px 0px #000;
+    transition: transform 0.1s, box-shadow 0.1s;
+}
+
+.close-attendance:active {
+    transform: translate(1px, 1px);
+    box-shadow: 1px 1px 0px #000;
+}
+
+/* Calendar grid: 7 columns for days of week */
+
+.calendar-wrapper {
+    flex-shrink: 0;
+}
+
+.calendar {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 6px;
+    background: white;
+    border-radius: 12px;
+    border: 2.5px solid rgba(0,0,0,0.15);
+    padding: 12px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+}
+
+.day-label {
+    text-align: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: #888;
+    padding: 4px 0 6px;
+}
+
+.date-cell {
+    padding: 10px 4px;
+    border-radius: 8px;
+    text-align: center;
+    background: #f5f7ff;
+    cursor: pointer;
+    transition: transform 0.15s, background 0.15s;
+    font-size: 13px;
+    font-weight: 500;
+    border: 1.5px solid transparent;
+}
+
+.date-cell:hover {
+    transform: scale(1.08);
+    border-color: rgba(0,0,0,0.15);
+}
+
+.date-cell:active {
+    transform: scale(0.95);
+}
+
+.present-day {
+    background: #c8f7d0 !important;
+    color: #1a6b35;
+    font-weight: 700;
+    border-color: #42c86a !important;
+}
+
+.absent-day {
+    background: #ffd6d6 !important;
+    color: #a01515;
+    font-weight: 700;
+    border-color: #e05555 !important;
+}
+
+.paid-day {
+    outline: 2px solid #3c6df0;
+    outline-offset: -2px;
+}
+
+/* ================= SUMMARY CARD ================= */
+
+.summary-card {
+    padding: 16px 18px;
+    flex-shrink: 0;
+}
+
+.summary-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.summary-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.summary-balance {
+    grid-column: 1 / -1;
+    background: rgba(0,0,0,0.05);
+    padding: 8px 10px;
+    border-radius: 6px;
+}
+
+.s-label {
+    font-size: 12px;
+    color: #555;
+    font-weight: 500;
+}
+
+.s-value {
+    font-size: 17px;
+    font-weight: 800;
+    color: #111;
+}
+
+/* ================= PAYMENT MODAL ================= */
+
+.payment-modal {
+    position: fixed;
+    inset: 0;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: 999;
+}
+
+.payment-box {
+    padding: 25px;
+    width: 92%;
+    max-width: 300px;
+    animation: fadePop 0.2s ease;
+}
+
+.payment-box h3 {
+    text-align: center;
+    margin-bottom: 12px;
+    font-size: 17px;
+}
+
+.payment-box input {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 8px;
+    border: 2px solid #000;
+    font-size: 16px;
+    background: white;
+    outline: none;
+    box-shadow: 3px 3px 0px rgba(0,0,0,0.2);
+}
+
+.payment-box input:focus {
+    box-shadow: 1px 1px 0px rgba(0,0,0,0.2);
+}
+
+/* ================= REPORT PAGE ================= */
+
+.report-section {
+    padding: 30px 20px;
+}
+
+.report-card label {
+    display: block;
+    font-weight: 600;
+    font-size: 14px;
+    margin-top: 14px;
+    margin-bottom: 4px;
+}
+
+.report-card select,
+.report-card button {
+    width: 100%;
+    padding: 11px 14px;
+    border-radius: 8px;
+    border: 2px solid #000;
+    font-size: 14px;
+    font-weight: 600;
+    background: white;
+    box-shadow: 3px 3px 0px #000;
+    cursor: pointer;
+    transition: transform 0.1s, box-shadow 0.1s;
+}
+
+.report-card button {
+    background: #00ff88;
+    margin-top: 20px;
+}
+
+.report-card button:active {
+    transform: translate(2px, 2px);
+    box-shadow: 1px 1px 0px #000;
+}
 
 
 /* ================= HEADER ================= */
