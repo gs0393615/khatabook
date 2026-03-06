@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Download Report</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="header">
+    <div class="logo-section">
+        <h1 class="company-name">📥 Download Report</h1>
+    </div>
+    <div class="header-right">
+        <button class="add-btn" onclick="goHome()" title="Back to Home"
+            style="font-size:18px;">←</button>
+    </div>
+</header>
+
+<section style="padding: 30px 20px;">
+    <div class="glass-card" style="padding: 25px; max-width: 480px; margin: auto;">
+
+        <h2 style="margin-bottom: 18px; font-size: 20px;">Generate Report</h2>
+
+        <label style="font-weight:600; font-size:14px;">📅 Select Month</label>
+        <select id="reportMonth"
+            style="width:100%; padding:11px 14px; margin-top:6px; margin-bottom:14px;
+                   border-radius:8px; border:2px solid #000; font-size:14px;
+                   box-shadow:3px 3px 0px #000; background:white; cursor:pointer;">
+        </select>
+
+        <label style="font-weight:600; font-size:14px;">👷 Worker Type</label>
+        <select id="reportType"
+            style="width:100%; padding:11px 14px; margin-top:6px;
+                   border-radius:8px; border:2px solid #000; font-size:14px;
+                   box-shadow:3px 3px 0px #000; background:white; cursor:pointer;">
+            <option value="all">All Workers</option>
+            <option value="headWorkers">मिस्त्री (Head Workers)</option>
+            <option value="labourers">लेबर (Labourers)</option>
+        </select>
+
+        <button
+            style="margin-top: 22px; width: 100%; padding: 13px;
+                   font-size: 15px; font-weight: 700;
+                   border: 2.5px solid #000; border-radius: 8px;
+                   background: #00ff88; cursor: pointer;
+                   box-shadow: 4px 4px 0px #000;
+                   transition: transform 0.1s, box-shadow 0.1s;"
+            onmousedown="this.style.transform='translate(2px,2px)';this.style.boxShadow='2px 2px 0px #000'"
+            onmouseup="this.style.transform='';this.style.boxShadow='4px 4px 0px #000';downloadReport()"
+            ontouchstart="this.style.transform='translate(2px,2px)'"
+            ontouchend="this.style.transform='';downloadReport()">
+            📊 Download Excel (CSV)
+        </button>
+
+    </div>
+</section>
+
+<script>
+
+function goHome() {
+    window.location.href = "index.html";
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    const select = document.getElementById("reportMonth");
+    const today  = new Date();
+
+    for (let i = 0; i < 6; i++) {
+        const date   = new Date(today.getFullYear(), today.getMonth() - i);
+        const option = document.createElement("option");
+        option.value = date.toISOString();
+        option.text  = date.toLocaleDateString("en-IN", { month: "long", year: "numeric" });
+        select.appendChild(option);
+    }
+});
+
+function downloadReport() {
+    const monthDate    = new Date(reportMonth.value);
+    const selectedMonth = monthDate.getMonth();
+    const selectedYear  = monthDate.getFullYear();
+    const typeFilter    = reportType.value;
+
+    const employees = JSON.parse(localStorage.getItem("employees")) || [];
+
+    let rows = [
+        ["Name", "Worker Type", "Date", "Status", "Daily Wage (₹)", "Earned (₹)", "Payment Paid (₹)"]
+    ];
+
+    let hasData = false;
+
+    employees.forEach(emp => {
+        if (typeFilter !== "all" && emp.type !== typeFilter) return;
+
+        for (let date in emp.attendance) {
+            const d = new Date(date);
+            if (d.getMonth() === selectedMonth && d.getFullYear() === selectedYear) {
+                hasData = true;
+                const status  = emp.attendance[date];
+                const earned  = status === "present" ? emp.wage : 0;
+                const payment = emp.payments[date] || 0;
+                rows.push([
+                    emp.name,
+                    emp.type === "headWorkers" ? "मिस्त्री" : "लेबर",
+                    date,
+                    status.charAt(0).toUpperCase() + status.slice(1),
+                    emp.wage,
+                    earned,
+                    payment
+                ]);
+            }
+        }
+    });
+
+    if (!hasData) {
+        alert("इस महीने के लिए कोई डेटा नहीं मिला।");
+        return;
+    }
+
+    exportToCSV(rows, monthDate.toLocaleDateString("en-IN", { month: "long", year: "numeric" }));
+}
+
+function exportToCSV(rows, monthLabel) {
+    let csvContent = "\uFEFF"; // BOM for Excel UTF-8 support
+    rows.forEach(row => {
+        csvContent += row.map(cell => `"${cell}"`).join(",") + "\r\n";
+    });
+
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url  = URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+    link.href     = url;
+    link.download = `Attendance_${monthLabel.replace(" ", "_")}.csv`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+}
+
+</script>
+</body>
+</html>
