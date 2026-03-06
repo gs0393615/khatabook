@@ -10,6 +10,16 @@ let currentCalendarDate = new Date();
 let paymentDate = null;
 let confirmCallback = null;
 
+// ================= LOCAL DATE HELPER (fixes UTC off-by-one bug) =================
+
+function getLocalDateString(date) {
+    const d = date || new Date();
+    const year  = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, "0");
+    const day   = String(d.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+}
+
 // ================= CURRENT DATE =================
 
 function updateCurrentDate() {
@@ -206,7 +216,7 @@ function createCard(emp) {
     card.style.backgroundPosition = "center";
     card.style.backgroundBlendMode = "overlay";
 
-    const today = new Date().toISOString().split("T")[0];
+    const today = getLocalDateString();
     let statusColor = "#ccc";
     const todayStatus = emp.attendance[today];
 
@@ -281,7 +291,7 @@ function closeConfirm() {
 // ================= SMART P/A LOGIC =================
 
 function handlePA(id, status, btn, name) {
-    const today = new Date().toISOString().split("T")[0];
+    const today = getLocalDateString();
 
     if (!isEditable(today)) {
         alert("केवल उसी हफ्ते में बदलाव हो सकता है");
@@ -332,8 +342,9 @@ function isEditable(dateString) {
 // ================= MONTHLY CALCULATION =================
 
 function calculateMonthlyEarned(emp) {
-    const month = new Date().getMonth();
-    const year  = new Date().getFullYear();
+    const now   = new Date();
+    const month = now.getMonth();
+    const year  = now.getFullYear();
     let count   = 0;
 
     for (let date in emp.attendance) {
@@ -528,4 +539,110 @@ function deleteEmployee(id) {
         localStorage.setItem("employees", JSON.stringify(employees));
         loadEmployees();
     });
+}
+
+// ================= PWA INSTALL PROMPT =================
+
+let deferredInstallPrompt = null;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredInstallPrompt = e;
+
+    // Show install banner if not already installed
+    if (!localStorage.getItem('pwaInstalled')) {
+        showInstallBanner();
+    }
+});
+
+window.addEventListener('appinstalled', () => {
+    localStorage.setItem('pwaInstalled', '1');
+    hideInstallBanner();
+});
+
+function showInstallBanner() {
+    if (document.getElementById('installBanner')) return;
+    const banner = document.createElement('div');
+    banner.id = 'installBanner';
+    banner.style.cssText = `
+        position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%);
+        background: #ffde59; border: 3px solid #000; border-radius: 12px;
+        box-shadow: 4px 4px 0 #000; padding: 12px 18px;
+        display: flex; align-items: center; gap: 12px;
+        z-index: 9999; font-family: 'Arial Black', sans-serif;
+        font-size: 13px; white-space: nowrap;
+    `;
+    banner.innerHTML = `
+        <span>📲 Install as Android App</span>
+        <button onclick="installPWA()" style="
+            background:#000; color:#ffde59; border:none;
+            border-radius:8px; padding:6px 14px;
+            font-weight:bold; cursor:pointer; font-size:13px;">
+            Install
+        </button>
+        <button onclick="hideInstallBanner()" style="
+            background:transparent; border:none;
+            font-size:18px; cursor:pointer; line-height:1;">✕</button>
+    `;
+    document.body.appendChild(banner);
+}
+
+function hideInstallBanner() {
+    const b = document.getElementById('installBanner');
+    if (b) b.remove();
+}
+
+function installPWA() {
+    if (!deferredInstallPrompt) return;
+    deferredInstallPrompt.prompt();
+    deferredInstallPrompt.userChoice.then(choice => {
+        if (choice.outcome === 'accepted') {
+            localStorage.setItem('pwaInstalled', '1');
+        }
+        deferredInstallPrompt = null;
+        hideInstallBanner();
+    });
+}
+
+// ================= BACKUP & RESTORE =================
+
+function exportBackup() {
+    const employees = localStorage.getItem("employees") || "[]";
+    const blob = new Blob([employees], { type: "application/json" });
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement("a");
+
+    const now  = new Date();
+    const dateStr = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,"0")}-${String(now.getDate()).padStart(2,"0")}`;
+    a.href     = url;
+    a.download = `khatabook-backup-${dateStr}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+}
+
+function importBackup() {
+    document.getElementById("importFileInput").click();
+}
+
+function handleImportFile(input) {
+    const file = input.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        try {
+            const data = JSON.parse(e.target.result);
+            if (!Array.isArray(data)) throw new Error("Invalid format");
+
+            showConfirm("⚠️ This will REPLACE all current data with the backup. Continue?", () => {
+                localStorage.setItem("employees", JSON.stringify(data));
+                loadEmployees();
+                alert(`✅ Restored ${data.length} employees successfully!`);
+            });
+        } catch {
+            alert("❌ Invalid backup file. Please use a valid खाताबुक backup.");
+        }
+    };
+    reader.readAsText(file);
+    input.value = ""; // reset so same file can be re-selected
 }

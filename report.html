@@ -1,50 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Download Report</title>
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download Report</title>
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-<header class="header">
-    <div class="logo-section">
-        <h1 class="company-name">📥 Download Report</h1>
-    </div>
-    <div class="header-right">
-        <button class="add-btn" onclick="goHome()" title="Back to Home"
-            style="font-size:18px;">←</button>
-    </div>
-</header>
+    <header class="header">
+        <div class="logo-section">
+            <h1 class="company-name">📥 Download Report</h1>
+        </div>
+        <div class="header-right">
+            <button class="add-btn" onclick="goHome()" title="Back to Home" style="font-size:18px;">←</button>
+        </div>
+    </header>
 
-<section style="padding: 30px 20px;">
-    <div class="glass-card" style="padding: 25px; max-width: 480px; margin: auto;">
+    <section style="padding: 30px 20px;">
+        <div class="glass-card" style="padding: 25px; max-width: 480px; margin: auto;">
 
-        <h2 style="margin-bottom: 6px; font-size: 20px;">📊 Generate PDF Report</h2>
-        <p style="font-size: 13px; color:#555; margin-bottom: 20px;">
-            Current month + 2 previous months available
-        </p>
+            <h2 style="margin-bottom: 6px; font-size: 20px;">📊 Generate PDF Report</h2>
+            <p style="font-size: 13px; color:#555; margin-bottom: 20px;">
+                Current month + 2 previous months available
+            </p>
 
-        <label style="font-weight:600; font-size:14px; display:block; margin-bottom:6px;">📅 Select Month</label>
-        <select id="reportMonth"
-            style="width:100%; padding:11px 14px; margin-bottom:14px;
+            <label style="font-weight:600; font-size:14px; display:block; margin-bottom:6px;">📅 Select Month</label>
+            <select id="reportMonth" style="width:100%; padding:11px 14px; margin-bottom:14px;
                    border-radius:8px; border:2px solid #000; font-size:14px;
                    box-shadow:3px 3px 0px #000; background:white; cursor:pointer; outline:none;">
-        </select>
+            </select>
 
-        <label style="font-weight:600; font-size:14px; display:block; margin-bottom:6px;">👷 Worker Type</label>
-        <select id="reportType"
-            style="width:100%; padding:11px 14px;
+            <label style="font-weight:600; font-size:14px; display:block; margin-bottom:6px;">👷 Worker Type</label>
+            <select id="reportType" style="width:100%; padding:11px 14px;
                    border-radius:8px; border:2px solid #000; font-size:14px;
                    box-shadow:3px 3px 0px #000; background:white; cursor:pointer; outline:none;">
-            <option value="all">All Workers</option>
-            <option value="headWorkers">मिस्त्री (Head Workers)</option>
-            <option value="labourers">लेबर (Labourers)</option>
-        </select>
+                <option value="all">All Workers</option>
+                <option value="headWorkers">मिस्त्री (Head Workers)</option>
+                <option value="labourers">लेबर (Labourers)</option>
+            </select>
 
-        <!-- PDF Preview summary -->
-        <div id="previewBox" style="
+            <!-- PDF Preview summary -->
+            <div id="previewBox" style="
             display:none;
             margin-top: 18px;
             padding: 14px;
@@ -55,147 +54,69 @@
             line-height: 1.8;
         "></div>
 
-        <button id="downloadBtn"
-            style="margin-top: 22px; width: 100%; padding: 13px;
+            <button id="downloadBtn" style="margin-top: 22px; width: 100%; padding: 13px;
                    font-size: 15px; font-weight: 700;
                    border: 2.5px solid #000; border-radius: 8px;
                    background: #00ff88; cursor: pointer;
                    box-shadow: 4px 4px 0px #000;
                    transition: transform 0.1s, box-shadow 0.1s;"
-            onmousedown="this.style.transform='translate(2px,2px)';this.style.boxShadow='2px 2px 0px #000'"
-            onmouseup="this.style.transform='';this.style.boxShadow='4px 4px 0px #000'"
-            onclick="downloadPDF()">
-            📄 Download PDF Report
-        </button>
+                onmousedown="this.style.transform='translate(2px,2px)';this.style.boxShadow='2px 2px 0px #000'"
+                onmouseup="this.style.transform='';this.style.boxShadow='4px 4px 0px #000'" onclick="downloadPDF()">
+                📄 Download PDF Report
+            </button>
 
-    </div>
-</section>
+        </div>
+    </section>
 
-<!-- jsPDF + AutoTable from CDN -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+    <!-- jsPDF + AutoTable from CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
 
-<script>
+    <script>
 
-function goHome() {
-    window.location.href = "index.html";
-}
+        function goHome() {
+            window.location.href = "index.html";
+        }
 
-// ================= POPULATE MONTHS (current + 2 previous only) =================
+        // ================= POPULATE MONTHS (current + 2 previous only) =================
 
-document.addEventListener("DOMContentLoaded", () => {
-    const select = document.getElementById("reportMonth");
-    const today  = new Date();
+        document.addEventListener("DOMContentLoaded", () => {
+            const select = document.getElementById("reportMonth");
+            const today = new Date();
 
-    // Only 3 options: current month and 2 months back
-    for (let i = 0; i < 3; i++) {
-        const date   = new Date(today.getFullYear(), today.getMonth() - i);
-        const option = document.createElement("option");
-        option.value = `${date.getFullYear()}-${date.getMonth()}`;
-        option.text  = date.toLocaleDateString("en-IN", { month: "long", year: "numeric" });
-        select.appendChild(option);
-    }
-
-    updatePreview();
-});
-
-document.getElementById("reportMonth").addEventListener("change", updatePreview);
-document.getElementById("reportType").addEventListener("change", updatePreview);
-
-// ================= PREVIEW =================
-
-function getReportData() {
-    const [year, month] = reportMonth.value.split("-").map(Number);
-    const typeFilter    = reportType.value;
-    const employees     = JSON.parse(localStorage.getItem("employees")) || [];
-    const rows          = [];
-
-    employees.forEach(emp => {
-        if (typeFilter !== "all" && emp.type !== typeFilter) return;
-
-        let presentCount = 0, absentCount = 0, totalPaid = 0;
-
-        for (let date in emp.attendance) {
-            const d = new Date(date);
-            if (d.getMonth() === month && d.getFullYear() === year) {
-                if (emp.attendance[date] === "present") presentCount++;
-                if (emp.attendance[date] === "absent")  absentCount++;
+            // Only 3 options: current month and 2 months back
+            for (let i = 0; i < 3; i++) {
+                const date = new Date(today.getFullYear(), today.getMonth() - i);
+                const option = document.createElement("option");
+                option.value = `${date.getFullYear()}-${date.getMonth()}`;
+                option.text = date.toLocaleDateString("en-IN", { month: "long", year: "numeric" });
+                select.appendChild(option);
             }
-        }
-        for (let date in emp.payments) {
-            const d = new Date(date);
-            if (d.getMonth() === month && d.getFullYear() === year)
-                totalPaid += emp.payments[date];
-        }
 
-        const earned  = presentCount * emp.wage;
-        const balance = earned - totalPaid;
+            updatePreview();
+        });
 
-        rows.push({ name: emp.name, type: emp.type, present: presentCount, absent: absentCount, earned, paid: totalPaid, balance });
-    });
+        document.getElementById("reportMonth").addEventListener("change", updatePreview);
+        document.getElementById("reportType").addEventListener("change", updatePreview);
 
-    return rows;
-}
+        // ================= PREVIEW =================
 
-function updatePreview() {
-    const rows = getReportData();
-    const box  = document.getElementById("previewBox");
+        function getReportData() {
+            const [year, month] = reportMonth.value.split("-").map(Number);
+            const typeFilter = reportType.value;
+            const employees = JSON.parse(localStorage.getItem("employees")) || [];
+            const rows = [];
 
-    if (!rows.length) {
-        box.style.display = "block";
-        box.innerHTML = "<b>⚠️ इस महीने के लिए कोई डेटा नहीं मिला।</b>";
-        return;
-    }
+            employees.forEach(emp => {
+                if (typeFilter !== "all" && emp.type !== typeFilter) return;
 
-    const totalEarned  = rows.reduce((s, r) => s + r.earned, 0);
-    const totalPaid    = rows.reduce((s, r) => s + r.paid, 0);
-    const totalBalance = rows.reduce((s, r) => s + r.balance, 0);
-
-    box.style.display = "block";
-    box.innerHTML = `
-        <b>📋 Preview</b><br>
-        👥 Employees: <b>${rows.length}</b><br>
-        💰 Total Earned: <b>₹${totalEarned}</b><br>
-        💸 Total Paid: <b>₹${totalPaid}</b><br>
-        ⚖️ Total Balance: <b style="color:${totalBalance >= 0 ? '#1a7a3f' : '#c0392b'}">₹${totalBalance}</b>
-    `;
-}
-
-// ================= PDF DOWNLOAD =================
-
-function downloadPDF() {
-    const [year, month] = reportMonth.value.split("-").map(Number);
-    const typeFilter    = reportType.value;
-    const employees     = JSON.parse(localStorage.getItem("employees")) || [];
-
-    const monthLabel = new Date(year, month).toLocaleDateString("en-IN", {
-        month: "long", year: "numeric"
-    });
-
-    // Build separate arrays per type
-    const groups = [
-        { key: "headWorkers", label: "Head Workers (Mistri)" },
-        { key: "labourers",   label: "Labourers"             }
-    ];
-
-    // Filter which groups to show
-    const activeGroups = typeFilter === "all"
-        ? groups
-        : groups.filter(g => g.key === typeFilter);
-
-    // Collect rows per group
-    const groupData = activeGroups.map(g => {
-        const rows = [];
-        employees
-            .filter(emp => emp.type === g.key)
-            .forEach((emp, i) => {
                 let presentCount = 0, absentCount = 0, totalPaid = 0;
 
                 for (let date in emp.attendance) {
                     const d = new Date(date);
                     if (d.getMonth() === month && d.getFullYear() === year) {
                         if (emp.attendance[date] === "present") presentCount++;
-                        if (emp.attendance[date] === "absent")  absentCount++;
+                        if (emp.attendance[date] === "absent") absentCount++;
                     }
                 }
                 for (let date in emp.payments) {
@@ -204,143 +125,220 @@ function downloadPDF() {
                         totalPaid += emp.payments[date];
                 }
 
-                const earned  = presentCount * emp.wage;
+                const earned = presentCount * emp.wage;
                 const balance = earned - totalPaid;
 
-                rows.push({
-                    sr: i + 1,
-                    name: emp.name,
-                    present: presentCount,
-                    absent:  absentCount,
-                    earned,
-                    paid:    totalPaid,
-                    balance
-                });
+                rows.push({ name: emp.name, type: emp.type, present: presentCount, absent: absentCount, earned, paid: totalPaid, balance });
             });
-        return { ...g, rows };
-    }).filter(g => g.rows.length > 0);
 
-    if (!groupData.length || groupData.every(g => g.rows.length === 0)) {
-        alert("इस महीने के लिए कोई डेटा नहीं मिला।");
-        return;
-    }
+            return rows;
+        }
 
-    const { jsPDF } = window.jspdf;
-    const doc  = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
-    const pageW = doc.internal.pageSize.getWidth();
+        function updatePreview() {
+            const rows = getReportData();
+            const box = document.getElementById("previewBox");
 
-    // ── Header banner ────────────────────────────────────────────
-    doc.setFillColor(255, 222, 89);
-    doc.rect(0, 0, pageW, 28, "F");
-    doc.setDrawColor(0);
-    doc.setLineWidth(0.8);
-    doc.line(0, 28, pageW, 28);
-
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(20);
-    doc.setTextColor(0, 0, 0);
-    doc.text("KHATAABOOK", pageW / 2, 13, { align: "center" });
-
-    doc.setFontSize(11);
-    doc.setFont("helvetica", "normal");
-    doc.text("Attendance & Payment Report", pageW / 2, 21, { align: "center" });
-
-    // ── Sub-header ────────────────────────────────────────────────
-    doc.setFontSize(10);
-    doc.setFont("helvetica", "bold");
-    doc.text(`Month: ${monthLabel}`, 14, 36);
-    doc.setFont("helvetica", "normal");
-    doc.text(
-        `Generated: ${new Date().toLocaleDateString("en-IN", { day:"numeric", month:"short", year:"numeric" })}`,
-        pageW - 14, 36, { align: "right" }
-    );
-    doc.setDrawColor(180);
-    doc.setLineWidth(0.3);
-    doc.line(14, 39, pageW - 14, 39);
-
-    let cursorY = 43;
-
-    // ── Draw one table per group ──────────────────────────────────
-    groupData.forEach((group, gi) => {
-        // Section title
-        doc.setFont("helvetica", "bold");
-        doc.setFontSize(12);
-        doc.setTextColor(0);
-        doc.setFillColor(0, 0, 0);
-        doc.rect(14, cursorY, pageW - 28, 9, "F");
-        doc.setTextColor(255, 222, 89);
-        doc.text(group.label, 17, cursorY + 6.2);
-        cursorY += 11;
-
-        const tableBody = group.rows.map(r => [
-            r.sr,
-            r.name,
-            r.present,
-            r.absent,
-            `Rs.${r.earned}`,
-            `Rs.${r.paid}`,
-            {
-                content: `Rs.${r.balance}`,
-                styles: { textColor: r.balance >= 0 ? [22, 100, 52] : [180, 30, 30], fontStyle: "bold" }
+            if (!rows.length) {
+                box.style.display = "block";
+                box.innerHTML = "<b>⚠️ इस महीने के लिए कोई डेटा नहीं मिला।</b>";
+                return;
             }
-        ]);
 
-        // Totals row
-        const totEarned  = group.rows.reduce((s, r) => s + r.earned,  0);
-        const totPaid    = group.rows.reduce((s, r) => s + r.paid,    0);
-        const totBalance = group.rows.reduce((s, r) => s + r.balance, 0);
+            const totalEarned = rows.reduce((s, r) => s + r.earned, 0);
+            const totalPaid = rows.reduce((s, r) => s + r.paid, 0);
+            const totalBalance = rows.reduce((s, r) => s + r.balance, 0);
 
-        tableBody.push([
-            { content: "TOTAL", colSpan: 4, styles: { fontStyle: "bold", halign: "right", fillColor: [230, 235, 255] } },
-            { content: `Rs.${totEarned}`,  styles: { fontStyle: "bold", fillColor: [230, 235, 255] } },
-            { content: `Rs.${totPaid}`,    styles: { fontStyle: "bold", fillColor: [230, 235, 255] } },
-            { content: `Rs.${totBalance}`, styles: { fontStyle: "bold", fillColor: [230, 235, 255], textColor: totBalance >= 0 ? [22, 100, 52] : [180, 30, 30] } }
-        ]);
+            box.style.display = "block";
+            box.innerHTML = `
+        <b>📋 Preview</b><br>
+        👥 Employees: <b>${rows.length}</b><br>
+        💰 Total Earned: <b>₹${totalEarned}</b><br>
+        💸 Total Paid: <b>₹${totalPaid}</b><br>
+        ⚖️ Total Balance: <b style="color:${totalBalance >= 0 ? '#1a7a3f' : '#c0392b'}">₹${totalBalance}</b>
+    `;
+        }
 
-        doc.autoTable({
-            startY: cursorY,
-            head: [["#", "Name", "Present", "Absent", "Earned", "Paid", "Balance"]],
-            body: tableBody,
-            styles: {
-                font: "helvetica",
-                fontSize: 10,
-                cellPadding: 4,
-                lineColor: [0, 0, 0],
-                lineWidth: 0.25
-            },
-            headStyles: {
-                fillColor: [50, 50, 50],
-                textColor: [255, 255, 255],
-                fontStyle: "bold",
-                halign: "center",
-                fontSize: 10
-            },
-            columnStyles: {
-                0: { halign: "center", cellWidth: 10 },
-                1: { cellWidth: 50 },
-                2: { halign: "center", cellWidth: 22 },
-                3: { halign: "center", cellWidth: 22 },
-                4: { halign: "right",  cellWidth: 28 },
-                5: { halign: "right",  cellWidth: 24 },
-                6: { halign: "right",  cellWidth: 26 }
-            },
-            alternateRowStyles: { fillColor: [248, 250, 255] },
-            theme: "grid"
-        });
+        // ================= PDF DOWNLOAD =================
 
-        cursorY = doc.lastAutoTable.finalY + (gi < groupData.length - 1 ? 10 : 6);
-    });
+        function downloadPDF() {
+            const [year, month] = reportMonth.value.split("-").map(Number);
+            const typeFilter = reportType.value;
+            const employees = JSON.parse(localStorage.getItem("employees")) || [];
 
-    // ── Footer ─────────────────────────────────────────────────
-    const pageH = doc.internal.pageSize.getHeight();
-    doc.setTextColor(150);
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(8);
-    doc.text("Generated by Khataabook Attendance System", pageW / 2, pageH - 8, { align: "center" });
+            const monthLabel = new Date(year, month).toLocaleDateString("en-IN", {
+                month: "long", year: "numeric"
+            });
 
-    doc.save(`Attendance_${monthLabel.replace(" ", "_")}.pdf`);
-}
+            // Build separate arrays per type
+            const groups = [
+                { key: "headWorkers", label: "Head Workers (Mistri)" },
+                { key: "labourers", label: "Labourers" }
+            ];
 
-</script>
+            // Filter which groups to show
+            const activeGroups = typeFilter === "all"
+                ? groups
+                : groups.filter(g => g.key === typeFilter);
+
+            // Collect rows per group
+            const groupData = activeGroups.map(g => {
+                const rows = [];
+                employees
+                    .filter(emp => emp.type === g.key)
+                    .forEach((emp, i) => {
+                        let presentCount = 0, absentCount = 0, totalPaid = 0;
+
+                        for (let date in emp.attendance) {
+                            const d = new Date(date);
+                            if (d.getMonth() === month && d.getFullYear() === year) {
+                                if (emp.attendance[date] === "present") presentCount++;
+                                if (emp.attendance[date] === "absent") absentCount++;
+                            }
+                        }
+                        for (let date in emp.payments) {
+                            const d = new Date(date);
+                            if (d.getMonth() === month && d.getFullYear() === year)
+                                totalPaid += emp.payments[date];
+                        }
+
+                        const earned = presentCount * emp.wage;
+                        const balance = earned - totalPaid;
+
+                        rows.push({
+                            sr: i + 1,
+                            name: emp.name,
+                            present: presentCount,
+                            absent: absentCount,
+                            earned,
+                            paid: totalPaid,
+                            balance
+                        });
+                    });
+                return { ...g, rows };
+            }).filter(g => g.rows.length > 0);
+
+            if (!groupData.length || groupData.every(g => g.rows.length === 0)) {
+                alert("इस महीने के लिए कोई डेटा नहीं मिला।");
+                return;
+            }
+
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
+            const pageW = doc.internal.pageSize.getWidth();
+
+            // ── Header banner ────────────────────────────────────────────
+            doc.setFillColor(255, 222, 89);
+            doc.rect(0, 0, pageW, 28, "F");
+            doc.setDrawColor(0);
+            doc.setLineWidth(0.8);
+            doc.line(0, 28, pageW, 28);
+
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(20);
+            doc.setTextColor(0, 0, 0);
+            doc.text("KHATAABOOK", pageW / 2, 13, { align: "center" });
+
+            doc.setFontSize(11);
+            doc.setFont("helvetica", "normal");
+            doc.text("Attendance & Payment Report", pageW / 2, 21, { align: "center" });
+
+            // ── Sub-header ────────────────────────────────────────────────
+            doc.setFontSize(10);
+            doc.setFont("helvetica", "bold");
+            doc.text(`Month: ${monthLabel}`, 14, 36);
+            doc.setFont("helvetica", "normal");
+            doc.text(
+                `Generated: ${new Date().toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}`,
+                pageW - 14, 36, { align: "right" }
+            );
+            doc.setDrawColor(180);
+            doc.setLineWidth(0.3);
+            doc.line(14, 39, pageW - 14, 39);
+
+            let cursorY = 43;
+
+            // ── Draw one table per group ──────────────────────────────────
+            groupData.forEach((group, gi) => {
+                // Section title
+                doc.setFont("helvetica", "bold");
+                doc.setFontSize(12);
+                doc.setTextColor(0);
+                doc.setFillColor(0, 0, 0);
+                doc.rect(14, cursorY, pageW - 28, 9, "F");
+                doc.setTextColor(255, 222, 89);
+                doc.text(group.label, 17, cursorY + 6.2);
+                cursorY += 11;
+
+                const tableBody = group.rows.map(r => [
+                    r.sr,
+                    r.name,
+                    r.present,
+                    r.absent,
+                    `Rs.${r.earned}`,
+                    `Rs.${r.paid}`,
+                    {
+                        content: `Rs.${r.balance}`,
+                        styles: { textColor: r.balance >= 0 ? [22, 100, 52] : [180, 30, 30], fontStyle: "bold" }
+                    }
+                ]);
+
+                // Totals row
+                const totEarned = group.rows.reduce((s, r) => s + r.earned, 0);
+                const totPaid = group.rows.reduce((s, r) => s + r.paid, 0);
+                const totBalance = group.rows.reduce((s, r) => s + r.balance, 0);
+
+                tableBody.push([
+                    { content: "TOTAL", colSpan: 4, styles: { fontStyle: "bold", halign: "right", fillColor: [230, 235, 255] } },
+                    { content: `Rs.${totEarned}`, styles: { fontStyle: "bold", fillColor: [230, 235, 255] } },
+                    { content: `Rs.${totPaid}`, styles: { fontStyle: "bold", fillColor: [230, 235, 255] } },
+                    { content: `Rs.${totBalance}`, styles: { fontStyle: "bold", fillColor: [230, 235, 255], textColor: totBalance >= 0 ? [22, 100, 52] : [180, 30, 30] } }
+                ]);
+
+                doc.autoTable({
+                    startY: cursorY,
+                    head: [["#", "Name", "Present", "Absent", "Earned", "Paid", "Balance"]],
+                    body: tableBody,
+                    styles: {
+                        font: "helvetica",
+                        fontSize: 10,
+                        cellPadding: 4,
+                        lineColor: [0, 0, 0],
+                        lineWidth: 0.25
+                    },
+                    headStyles: {
+                        fillColor: [50, 50, 50],
+                        textColor: [255, 255, 255],
+                        fontStyle: "bold",
+                        halign: "center",
+                        fontSize: 10
+                    },
+                    columnStyles: {
+                        0: { halign: "center", cellWidth: 10 },
+                        1: { cellWidth: 50 },
+                        2: { halign: "center", cellWidth: 22 },
+                        3: { halign: "center", cellWidth: 22 },
+                        4: { halign: "right", cellWidth: 28 },
+                        5: { halign: "right", cellWidth: 24 },
+                        6: { halign: "right", cellWidth: 26 }
+                    },
+                    alternateRowStyles: { fillColor: [248, 250, 255] },
+                    theme: "grid"
+                });
+
+                cursorY = doc.lastAutoTable.finalY + (gi < groupData.length - 1 ? 10 : 6);
+            });
+
+            // ── Footer ─────────────────────────────────────────────────
+            const pageH = doc.internal.pageSize.getHeight();
+            doc.setTextColor(150);
+            doc.setFont("helvetica", "normal");
+            doc.setFontSize(8);
+            doc.text("Generated by Khataabook Attendance System", pageW / 2, pageH - 8, { align: "center" });
+
+            doc.save(`Attendance_${monthLabel.replace(" ", "_")}.pdf`);
+        }
+
+    </script>
 </body>
+
 </html>

@@ -3,10 +3,24 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link rel="icon" href="favicon.png" type="image/png">
+    <link rel="apple-touch-icon" href="favicon.png">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#ffde59">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="खाताबुक">
     <title>Attendance System</title>
     <link rel="stylesheet" href="style.css">
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js');
+            });
+        }
+    </script>
 </head>
 
 <body>
@@ -21,7 +35,11 @@
             <div class="logo-dropdown" id="logoDropdown">
                 <div onclick="goHome()">🏠 Home</div>
                 <div onclick="goReport()">📥 Download Report</div>
+                <div onclick="exportBackup()">💾 Backup Data</div>
+                <div onclick="importBackup()">📂 Restore Backup</div>
             </div>
+            <input type="file" id="importFileInput" accept=".json" style="display:none"
+                onchange="handleImportFile(this)">
         </div>
 
         <div class="header-right">
