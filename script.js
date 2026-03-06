@@ -82,6 +82,65 @@ function toggleSection(id, header) {
     }
 }
 
+// ================= AVATAR GENERATOR =================
+
+function generateAvatar(name, id) {
+    // Derive unique hue from name characters
+    let hash = 0;
+    for (let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
+    hash = Math.abs(hash);
+
+    const hue1 = hash % 360;
+    const hue2 = (hue1 + 40) % 360;
+    const hue3 = (hue1 + 80) % 360;
+
+    const c1 = `hsl(${hue1},70%,55%)`;
+    const c2 = `hsl(${hue2},65%,45%)`;
+    const c3 = `hsl(${hue3},75%,65%)`;
+
+    // Shape variety from id
+    const variant = id % 4;
+
+    const shapes = {
+        0: `
+            <circle cx="100" cy="60"  r="50" fill="${c1}" opacity="0.85"/>
+            <circle cx="40"  cy="120" r="40" fill="${c2}" opacity="0.75"/>
+            <circle cx="150" cy="130" r="55" fill="${c3}" opacity="0.6"/>
+            <circle cx="100" cy="100" r="28" fill="white" opacity="0.15"/>`,
+        1: `
+            <polygon points="100,10 180,170 20,170"  fill="${c1}" opacity="0.85"/>
+            <polygon points="20,20  160,20  90,180"  fill="${c2}" opacity="0.6"/>
+            <circle  cx="100" cy="100" r="32"        fill="${c3}" opacity="0.55"/>`,
+        2: `
+            <rect x="10"  y="10"  width="90"  height="90"  rx="16" fill="${c1}" opacity="0.85"/>
+            <rect x="70"  y="70"  width="110" height="110" rx="20" fill="${c2}" opacity="0.7"/>
+            <rect x="30"  y="100" width="70"  height="70"  rx="12" fill="${c3}" opacity="0.55"/>`,
+        3: `
+            <ellipse cx="80"  cy="80"  rx="70" ry="50" fill="${c1}" opacity="0.85"/>
+            <ellipse cx="120" cy="130" rx="55" ry="45" fill="${c2}" opacity="0.7"/>
+            <ellipse cx="60"  cy="150" rx="50" ry="30" fill="${c3}" opacity="0.55"/>`
+    };
+
+    const initials = name.trim().split(" ").map(w => w[0].toUpperCase()).slice(0, 2).join("");
+
+    return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(`
+        <svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
+            <defs>
+                <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%"   stop-color="hsl(${hue1},30%,92%)"/>
+                    <stop offset="100%" stop-color="hsl(${hue2},35%,85%)"/>
+                </linearGradient>
+            </defs>
+            <rect width="200" height="200" fill="url(#bg)"/>
+            ${shapes[variant]}
+            <text x="100" y="108" font-family="Arial Black, sans-serif"
+                  font-size="52" font-weight="900" text-anchor="middle"
+                  fill="white" opacity="0.95"
+                  style="text-shadow:0 2px 8px rgba(0,0,0,0.3)">${initials}</text>
+        </svg>
+    `)}`;
+}
+
 // ================= ADD EMPLOYEE =================
 
 function openAddEmployee() {
@@ -97,39 +156,30 @@ function saveEmployee() {
     const wage  = Number(dailyWage.value);
     const phone = empPhone.value.trim();
     const type  = workerType.value;
-    const imageFile = empImage.files[0];
 
     if (!name || !wage) return alert("कृपया सभी फील्ड भरें");
 
-    const reader = new FileReader();
-
-    reader.onload = function () {
-        const employee = {
-            id: Date.now(),
-            name,
-            phone,
-            wage,
-            type,
-            image: reader.result || "",
-            attendance: {},
-            payments: {}
-        };
-
-        let employees = JSON.parse(localStorage.getItem("employees")) || [];
-        employees.push(employee);
-        localStorage.setItem("employees", JSON.stringify(employees));
-
-        empName.value  = "";
-        dailyWage.value = "";
-        empPhone.value = "";
-        empImage.value = "";
-
-        closeModal();
-        loadEmployees();
+    const id = Date.now();
+    const employee = {
+        id,
+        name,
+        phone,
+        wage,
+        type,
+        attendance: {},
+        payments:   {}
     };
 
-    if (imageFile) reader.readAsDataURL(imageFile);
-    else reader.onload();
+    let employees = JSON.parse(localStorage.getItem("employees")) || [];
+    employees.push(employee);
+    localStorage.setItem("employees", JSON.stringify(employees));
+
+    empName.value   = "";
+    dailyWage.value = "";
+    empPhone.value  = "";
+
+    closeModal();
+    loadEmployees();
 }
 
 // ================= LOAD EMPLOYEES =================
@@ -149,11 +199,12 @@ function createCard(emp) {
     const card = document.createElement("div");
     card.className = "employee-card";
 
-    if (emp.image) {
-        card.style.backgroundImage  = `url(${emp.image})`;
-        card.style.backgroundSize   = "cover";
-        card.style.backgroundBlendMode = "overlay";
-    }
+    // Auto-generated avatar as card background
+    const avatarUrl = generateAvatar(emp.name, emp.id);
+    card.style.backgroundImage    = `url("${avatarUrl}")`;
+    card.style.backgroundSize     = "cover";
+    card.style.backgroundPosition = "center";
+    card.style.backgroundBlendMode = "overlay";
 
     const today = new Date().toISOString().split("T")[0];
     let statusColor = "#ccc";
@@ -425,15 +476,18 @@ function updateSummary(emp, year, month) {
     let totalPaid    = 0;
 
     for (let date in emp.attendance) {
-        const d = new Date(date);
-        if (d.getMonth() === month && d.getFullYear() === year) {
+        const [y, m] = date.split("-").map(Number);
+        if (m - 1 === month && y === year) {
             if (emp.attendance[date] === "present") presentCount++;
             if (emp.attendance[date] === "absent")  absentCount++;
         }
     }
 
+    // ✅ FIX: Parse date string directly to avoid UTC timezone month-shift bug
     for (let date in emp.payments) {
-        totalPaid += emp.payments[date];
+        const [y, m] = date.split("-").map(Number);
+        if (m - 1 === month && y === year)
+            totalPaid += emp.payments[date];
     }
 
     const earned  = presentCount * emp.wage;
