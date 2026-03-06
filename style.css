@@ -230,6 +230,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
+    padding-right: 4px;
 }
 
 .card-info {
@@ -267,11 +268,11 @@ body {
     transform: scale(1.15);
 }
 
-/* Status Dot */
+/* Status Dot — bottom-left so it never blocks the name */
 
 .status-dot {
     position: absolute;
-    top: 12px;
+    bottom: 12px;
     left: 12px;
     width: 9px;
     height: 9px;
@@ -505,7 +506,7 @@ body {
 }
 
 .month-nav:first-child  { left: 12px; }
-.month-nav:nth-child(3) { right: 55px; }
+.month-nav:nth-child(3) { right: 60px; }
 
 .close-attendance {
     position: absolute;
