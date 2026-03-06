@@ -10,110 +10,101 @@
 
 <header class="header">
     <div class="logo-section">
-        <h1 class="company-name">Download Report</h1>
+        <h1 class="company-name">📥 Download Report</h1>
     </div>
-
     <div class="header-right">
-        <button class="add-btn" onclick="goHome()">←</button>
+        <button class="add-btn" onclick="goHome()" title="Back to Home"
+            style="font-size:18px;">←</button>
     </div>
 </header>
 
-<section style="padding:30px;">
+<section style="padding: 30px 20px;">
+    <div class="glass-card" style="padding: 25px; max-width: 480px; margin: auto;">
 
-    <div class="glass-card" style="padding:25px; max-width:500px; margin:auto;">
+        <h2 style="margin-bottom: 18px; font-size: 20px;">Generate Report</h2>
 
-        <h2 style="margin-bottom:20px;">Generate Report</h2>
-
-        <label>Select Month</label>
-        <select id="reportMonth"></select>
-
-        <label style="margin-top:15px;">Worker Type</label>
-        <select id="reportType">
-            <option value="all">All</option>
-            <option value="headWorkers">Head Workers</option>
-            <option value="labourers">Labourers</option>
+        <label style="font-weight:600; font-size:14px;">📅 Select Month</label>
+        <select id="reportMonth"
+            style="width:100%; padding:11px 14px; margin-top:6px; margin-bottom:14px;
+                   border-radius:8px; border:2px solid #000; font-size:14px;
+                   box-shadow:3px 3px 0px #000; background:white; cursor:pointer;">
         </select>
 
-        <button style="margin-top:20px; width:100%;" 
-            onclick="downloadReport()">
-            Download Excel
+        <label style="font-weight:600; font-size:14px;">👷 Worker Type</label>
+        <select id="reportType"
+            style="width:100%; padding:11px 14px; margin-top:6px;
+                   border-radius:8px; border:2px solid #000; font-size:14px;
+                   box-shadow:3px 3px 0px #000; background:white; cursor:pointer;">
+            <option value="all">All Workers</option>
+            <option value="headWorkers">मिस्त्री (Head Workers)</option>
+            <option value="labourers">लेबर (Labourers)</option>
+        </select>
+
+        <button
+            style="margin-top: 22px; width: 100%; padding: 13px;
+                   font-size: 15px; font-weight: 700;
+                   border: 2.5px solid #000; border-radius: 8px;
+                   background: #00ff88; cursor: pointer;
+                   box-shadow: 4px 4px 0px #000;
+                   transition: transform 0.1s, box-shadow 0.1s;"
+            onmousedown="this.style.transform='translate(2px,2px)';this.style.boxShadow='2px 2px 0px #000'"
+            onmouseup="this.style.transform='';this.style.boxShadow='4px 4px 0px #000';downloadReport()"
+            ontouchstart="this.style.transform='translate(2px,2px)'"
+            ontouchend="this.style.transform='';downloadReport()">
+            📊 Download Excel (CSV)
         </button>
 
     </div>
-
 </section>
 
 <script>
-
-// ================= NAVIGATION =================
 
 function goHome() {
     window.location.href = "index.html";
 }
 
-// ================= LOAD MONTH OPTIONS =================
-
 document.addEventListener("DOMContentLoaded", () => {
-
     const select = document.getElementById("reportMonth");
-    const today = new Date();
+    const today  = new Date();
 
-    for (let i = 0; i < 3; i++) {
-        const date = new Date(today.getFullYear(), today.getMonth() - i);
+    for (let i = 0; i < 6; i++) {
+        const date   = new Date(today.getFullYear(), today.getMonth() - i);
         const option = document.createElement("option");
-
         option.value = date.toISOString();
-        option.text =
-            date.toLocaleDateString("en-IN", {
-                month: "long",
-                year: "numeric"
-            });
-
+        option.text  = date.toLocaleDateString("en-IN", { month: "long", year: "numeric" });
         select.appendChild(option);
     }
 });
 
-// ================= DOWNLOAD REPORT =================
-
 function downloadReport() {
-
-    const monthDate = new Date(reportMonth.value);
+    const monthDate    = new Date(reportMonth.value);
     const selectedMonth = monthDate.getMonth();
-    const selectedYear = monthDate.getFullYear();
-    const typeFilter = reportType.value;
+    const selectedYear  = monthDate.getFullYear();
+    const typeFilter    = reportType.value;
 
-    const employees =
-        JSON.parse(localStorage.getItem("employees")) || [];
+    const employees = JSON.parse(localStorage.getItem("employees")) || [];
 
     let rows = [
-        ["Name","Worker Type","Date","Status","Daily Wage","Earned","Payment"]
+        ["Name", "Worker Type", "Date", "Status", "Daily Wage (₹)", "Earned (₹)", "Payment Paid (₹)"]
     ];
 
-    employees.forEach(emp => {
+    let hasData = false;
 
-        if (typeFilter !== "all" && emp.type !== typeFilter)
-            return;
+    employees.forEach(emp => {
+        if (typeFilter !== "all" && emp.type !== typeFilter) return;
 
         for (let date in emp.attendance) {
-
             const d = new Date(date);
-
-            if (
-                d.getMonth() === selectedMonth &&
-                d.getFullYear() === selectedYear
-            ) {
-
-                const status = emp.attendance[date];
-                const earned =
-                    status === "present" ? emp.wage : 0;
-
+            if (d.getMonth() === selectedMonth && d.getFullYear() === selectedYear) {
+                hasData = true;
+                const status  = emp.attendance[date];
+                const earned  = status === "present" ? emp.wage : 0;
                 const payment = emp.payments[date] || 0;
-
                 rows.push([
                     emp.name,
-                    emp.type === "headWorkers" ? "Head Worker" : "Labourer",
+                    emp.type === "headWorkers" ? "मिस्त्री" : "लेबर",
                     date,
-                    status,
+                    status.charAt(0).toUpperCase() + status.slice(1),
                     emp.wage,
                     earned,
                     payment
@@ -122,30 +113,32 @@ function downloadReport() {
         }
     });
 
-    exportToCSV(rows);
+    if (!hasData) {
+        alert("इस महीने के लिए कोई डेटा नहीं मिला।");
+        return;
+    }
+
+    exportToCSV(rows, monthDate.toLocaleDateString("en-IN", { month: "long", year: "numeric" }));
 }
 
-// ================= EXPORT FUNCTION =================
-
-function exportToCSV(rows) {
-
-    let csvContent = "data:text/csv;charset=utf-8,";
-
+function exportToCSV(rows, monthLabel) {
+    let csvContent = "\uFEFF"; // BOM for Excel UTF-8 support
     rows.forEach(row => {
-        csvContent += row.join(",") + "\r\n";
+        csvContent += row.map(cell => `"${cell}"`).join(",") + "\r\n";
     });
 
-    const encodedUri = encodeURI(csvContent);
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url  = URL.createObjectURL(blob);
 
     const link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
-    link.setAttribute("download", "Attendance_Report.csv");
+    link.href     = url;
+    link.download = `Attendance_${monthLabel.replace(" ", "_")}.csv`;
     document.body.appendChild(link);
-
     link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
 }
 
 </script>
-
 </body>
 </html>
